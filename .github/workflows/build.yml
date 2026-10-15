@@ -1,0 +1,53 @@
+name: Build NeuLibrar APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build Android Project & Inject Icon
+        run: |
+          mkdir -p www assets
+          cp index.html manifest.json sw.js icon-*.png www/ 2>/dev/null || true
+          cp icon-512.png assets/icon-only.png
+          cp icon-512-maskable.png assets/icon-foreground.png
+          cp icon-512-maskable.png assets/icon-background.png
+          cp icon-512-maskable.png assets/splash.png
+          cp icon-512-maskable.png assets/splash-dark.png
+          npm init -y
+          npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/assets
+          npx cap init NeuLibrar com.neulibrar.app --web-dir www
+          npx cap add android
+          npx capacitor-assets generate --android --iconBackgroundColor '#121316' --iconBackgroundColorDark '#121316' --splashBackgroundColor '#121316' --splashBackgroundColorDark '#121316'
+          npx cap sync android
+
+      - name: Compile APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload Ready APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: NeuLibrar-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
