@@ -13,32 +13,35 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - name: Setup Java 21
+        uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
-          java-version: 17
+          java-version: 21
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
       - name: Build Android Project & Inject Icon
         run: |
-          mkdir -p www assets
+          mkdir -p www
           cp index.html manifest.json sw.js icon-*.png www/ 2>/dev/null || true
-          cp icon-512.png assets/icon-only.png
-          cp icon-512-maskable.png assets/icon-foreground.png
-          cp icon-512-maskable.png assets/icon-background.png
-          cp icon-512-maskable.png assets/splash.png
-          cp icon-512-maskable.png assets/splash-dark.png
           npm init -y
-          npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/assets
+          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
           npx cap init NeuLibrar com.neulibrar.app --web-dir www
           npx cap add android
-          npx capacitor-assets generate --android --iconBackgroundColor '#121316' --iconBackgroundColorDark '#121316' --splashBackgroundColor '#121316' --splashBackgroundColorDark '#121316'
           npx cap sync android
+          # İkonu tüm Android klasörlerine doğrudan yerleştir ve yuvarlak maskeyi temizle
+          for dir in android/app/src/main/res/mipmap-*; do
+            if [ -d "$dir" ]; then
+              cp icon-512.png "$dir/ic_launcher.png" 2>/dev/null || true
+              cp icon-512.png "$dir/ic_launcher_round.png" 2>/dev/null || true
+              cp icon-512.png "$dir/ic_launcher_foreground.png" 2>/dev/null || true
+            fi
+          done
+          rm -rf android/app/src/main/res/mipmap-anydpi-v26
 
       - name: Compile APK
         run: |
