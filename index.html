@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0a0b0e">
+    <meta name="theme-color" content="#07080a">
     <title>NeuLibrar</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -14,22 +14,22 @@
     <style>
         :root {
             --accent: #6366f1;
-            --accent-glow: rgba(99, 102, 241, 0.35);
-            --bg-primary: #0a0b0e;
-            --bg-glass: rgba(255, 255, 255, 0.05);
+            --accent-glow: rgba(99, 102, 241, 0.4);
+            --bg-primary: #07080a;
+            --bg-glass: rgba(255, 255, 255, 0.04);
             --bg-glass-card: rgba(255, 255, 255, 0.03);
-            --bg-modal: rgba(15, 17, 23, 0.88);
+            --bg-modal: rgba(12, 14, 18, 0.88);
             --text-primary: #f3f4f6;
             --text-secondary: #9ca3af;
             --text-muted: #6b7280;
-            --border-glass: rgba(255, 255, 255, 0.1);
+            --border-glass: rgba(255, 255, 255, 0.09);
             --border-glass-shine: rgba(255, 255, 255, 0.18);
             --gloss-line: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
             --danger: #ef4444;
         }
 
         [data-theme="light"] {
-            --bg-primary: #eef2f6;
+            --bg-primary: #e5e9f0;
             --bg-glass: rgba(255, 255, 255, 0.65);
             --bg-glass-card: rgba(255, 255, 255, 0.5);
             --bg-modal: rgba(255, 255, 255, 0.92);
@@ -47,139 +47,106 @@
             font-family: 'Inter', -apple-system, sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-primary);
-            padding-bottom: 110px;
             user-select: none;
             overflow-x: hidden;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 10%, var(--accent-glow) 0px, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.06) 0px, transparent 45%);
-            background-attachment: fixed;
         }
 
-        .container { max-width: 800px; margin: 0 auto; padding: 16px; }
+        /* Live Aurora Background */
+        .aurora-container {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-        /* App Header & Top Glass Nav */
+        .aurora-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.6;
+            animation: floatAurora 18s ease-in-out infinite alternate;
+        }
+
+        .aurora-1 { top: -10%; left: -10%; width: 420px; height: 420px; background: var(--accent-glow); }
+        .aurora-2 { bottom: -10%; right: -10%; width: 380px; height: 380px; background: rgba(16, 185, 129, 0.22); animation-delay: -5s; }
+
+        @keyframes floatAurora {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, -60px) scale(1.15); }
+            100% { transform: translate(-30px, 40px) scale(0.95); }
+        }
+
+        .app-shell { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* Minimal Header & Dots Indicator */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px;
-            padding-bottom: 12px;
+            padding: 18px 20px 10px 20px;
         }
 
-        .brand h1 {
-            font-size: 1.35rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            letter-spacing: -0.02em;
-        }
+        .brand-title { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; }
 
-        .version-tag {
-            font-size: 0.65rem;
-            font-family: 'JetBrains Mono', monospace;
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--accent);
-            border: 1px solid var(--border-glass);
-            padding: 2px 7px;
-            border-radius: 20px;
-        }
+        .dots-indicator { display: flex; gap: 6px; }
+        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-muted); opacity: 0.4; transition: all 0.3s ease; }
+        .dot.active { background: var(--accent); opacity: 1; width: 20px; border-radius: 10px; box-shadow: 0 0 10px var(--accent-glow); }
 
-        /* Nav Pills Header Switcher */
-        .nav-tabs {
-            display: flex;
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glass);
-            padding: 4px;
-            border-radius: 30px;
-            gap: 4px;
-        }
+        /* Swipeable Views Area */
+        .views-viewport { flex: 1; display: flex; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); width: 300%; }
+        .view-page { width: 33.333%; padding: 10px 20px 120px 20px; }
 
-        .nav-tab-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-
-        .nav-tab-btn.active {
-            background: var(--accent);
-            color: #ffffff;
-            box-shadow: 0 4px 15px var(--accent-glow);
-        }
-
-        /* View Switching Containers */
-        .view-panel { display: none; animation: fadeIn 0.25s ease-out; }
-        .view-panel.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Glass Cards for Categories View */
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 10px;
-        }
+        /* Categories Glass Cards */
+        .categories-stack { display: flex; flex-direction: column; gap: 12px; }
 
         .cat-card {
             background: var(--bg-glass-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--border-glass);
-            border-radius: 18px;
-            padding: 18px;
+            border-radius: 20px;
+            padding: 16px 18px;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.2s, border-color 0.2s;
         }
 
         .cat-card::before { content: ''; position: absolute; inset: 0; background: var(--gloss-line); pointer-events: none; }
-        .cat-card:active { transform: scale(0.97); }
+        .cat-card:active { transform: scale(0.98); }
 
-        .cat-num { font-family: 'JetBrains Mono', monospace; font-size: 1.8rem; font-weight: 700; color: var(--accent); }
-        .cat-title { font-size: 0.9rem; font-weight: 600; margin-top: 6px; color: var(--text-primary); }
-        .cat-desc { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; }
+        .cat-header { display: flex; justify-content: space-between; align-items: center; }
+        .cat-name { font-size: 0.98rem; font-weight: 600; color: var(--text-primary); }
+        .cat-count { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+        .cat-previews { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+        .cat-chip { font-size: 0.72rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border-glass); }
 
-        /* Sort Pills Scroll */
-        .sort-scroll-container { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
-        .sort-chip {
+        /* Main Showcase Book List */
+        .sort-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
+        .sort-btn {
             background: var(--bg-glass);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-glass);
             color: var(--text-secondary);
-            padding: 6px 13px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.76rem;
             font-weight: 500;
             white-space: nowrap;
             cursor: pointer;
         }
-        .sort-chip.active { background: var(--accent); color: #fff; border-color: transparent; }
+        .sort-btn.active { background: var(--accent); color: #fff; border-color: transparent; }
 
-        /* Book List & Clean Items */
-        .book-list { display: flex; flex-direction: column; gap: 10px; }
+        .book-list { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
 
-        .book-item {
+        .book-card {
             background: var(--bg-glass-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--border-glass);
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 14px 16px;
             display: grid;
             grid-template-columns: 36px 1fr auto;
@@ -191,8 +158,8 @@
             transition: transform 0.15s;
         }
 
-        .book-item::before { content: ''; position: absolute; inset: 0; background: var(--gloss-line); pointer-events: none; }
-        .book-item:active { transform: scale(0.98); }
+        .book-card::before { content: ''; position: absolute; inset: 0; background: var(--gloss-line); pointer-events: none; }
+        .book-card:active { transform: scale(0.98); }
 
         .book-no {
             font-family: 'JetBrains Mono', monospace;
@@ -206,108 +173,102 @@
             border-radius: 8px;
         }
 
-        .book-title { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); }
-        .book-author { font-size: 0.81rem; color: var(--text-secondary); margin-top: 1px; }
-        .book-note {
-            font-size: 0.75rem;
-            color: #fcd34d;
-            margin-top: 5px;
-            padding: 3px 8px;
-            background: rgba(245, 158, 11, 0.12);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            border-radius: 6px;
-            display: inline-block;
-        }
+        .book-title { font-weight: 600; font-size: 0.94rem; color: var(--text-primary); }
+        .book-author { font-size: 0.8rem; color: var(--text-secondary); margin-top: 1px; }
+        .book-note { font-size: 0.74rem; color: #fcd34d; margin-top: 4px; padding: 2px 7px; background: rgba(245, 158, 11, 0.12); border-radius: 5px; display: inline-block; }
 
-        /* Glass Badges */
-        .badge {
-            font-size: 0.74rem;
-            font-weight: 600;
-            padding: 6px 12px;
-            border-radius: 20px;
-            white-space: nowrap;
-            backdrop-filter: blur(10px);
-            border: 1px solid transparent;
-        }
+        /* Badges */
+        .badges-wrapper { display: flex; gap: 6px; align-items: center; }
+        .badge { font-size: 0.74rem; font-weight: 600; padding: 6px 11px; border-radius: 20px; white-space: nowrap; border: 1px solid transparent; }
+        .badge-read { background: rgba(16, 185, 129, 0.16); color: #34d399; border-color: rgba(52, 211, 153, 0.3); }
+        .badge-reading { background: rgba(14, 165, 233, 0.16); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); }
+        .badge-reread-plan { background: rgba(217, 70, 239, 0.16); color: #f0abfc; border-color: rgba(240, 171, 252, 0.3); }
+        .badge-plan { background: rgba(249, 115, 22, 0.16); color: #fb923c; border-color: rgba(251, 146, 60, 0.3); }
+        .badge-re-reading { background: rgba(132, 204, 22, 0.18); color: #a3e635; border-color: rgba(163, 230, 53, 0.35); }
 
-        .badge-read { background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(52, 211, 153, 0.3); }
-        .badge-reading { background: rgba(14, 165, 233, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); }
-        .badge-rereading { background: rgba(132, 204, 22, 0.15); color: #a3e635; border-color: rgba(163, 230, 53, 0.3); }
-        .badge-reread-plan { background: rgba(217, 70, 239, 0.15); color: #f0abfc; border-color: rgba(240, 171, 252, 0.3); }
-        .badge-plan { background: rgba(249, 115, 22, 0.15); color: #fb923c; border-color: rgba(251, 146, 60, 0.3); }
-
-        /* Floating Integrated Capsule (Hap Tasarım) */
-        .floating-capsule {
+        /* Integrated Floating Capsule (Hap) */
+        .pill-dock {
             position: fixed;
-            bottom: 20px;
+            bottom: 22px;
             left: 50%;
             transform: translateX(-50%);
-            width: calc(100% - 32px);
-            max-width: 520px;
+            width: calc(100% - 40px);
+            max-width: 480px;
             background: var(--bg-modal);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             border: 1px solid var(--border-glass-shine);
             border-radius: 40px;
-            padding: 6px 8px 6px 16px;
+            padding: 6px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+            gap: 8px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
             z-index: 80;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .capsule-input {
+        .pill-search-trigger {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .pill-input {
             flex: 1;
             background: transparent;
             border: none;
             color: var(--text-primary);
             font-size: 0.88rem;
             outline: none;
+            padding: 0 4px;
+            display: none;
         }
 
-        .capsule-add-btn {
+        .pill-dock.expanded .pill-input { display: block; }
+
+        .pill-add-btn {
             background: var(--accent);
             color: #fff;
             border: none;
-            padding: 10px 18px;
+            padding: 10px 20px;
             border-radius: 30px;
-            font-size: 0.84rem;
+            font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 4px 15px var(--accent-glow);
             white-space: nowrap;
+            margin-left: auto;
         }
 
-        /* Settings View Styles */
-        .settings-section {
+        /* Settings Card */
+        .settings-card {
             background: var(--bg-glass-card);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
             border: 1px solid var(--border-glass);
-            border-radius: 18px;
+            border-radius: 20px;
             padding: 18px;
             margin-bottom: 14px;
         }
 
-        .settings-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); }
+        .settings-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); }
+        .color-row { display: flex; gap: 12px; }
+        .color-dot { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+        .color-dot.active { border-color: #fff; box-shadow: 0 0 12px rgba(255,255,255,0.4); }
 
-        .color-palette { display: flex; gap: 12px; }
-        .color-dot {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: transform 0.2s;
-        }
-        .color-dot:active { transform: scale(0.9); }
-        .color-dot.active { border-color: #ffffff; box-shadow: 0 0 12px rgba(255, 255, 255, 0.4); }
-
-        /* Modal Structure */
+        /* Modals & Category Drawer */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.78);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             display: none;
@@ -321,17 +282,17 @@
         .modal {
             background: var(--bg-modal);
             border: 1px solid var(--border-glass-shine);
-            border-radius: 22px;
+            border-radius: 24px;
             width: 100%;
             max-width: 440px;
-            padding: 24px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-            max-height: 90vh;
+            padding: 22px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+            max-height: 88vh;
             overflow-y: auto;
         }
 
         .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 500; }
+        .form-group label { display: block; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 5px; font-weight: 500; }
         .form-group input, .form-group textarea {
             width: 100%;
             background: rgba(0, 0, 0, 0.25);
@@ -339,15 +300,14 @@
             color: var(--text-primary);
             padding: 11px 14px;
             border-radius: 12px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             outline: none;
         }
 
-        /* Read Counter Area inside Modal */
-        .reread-box {
-            background: rgba(255, 255, 255, 0.03);
+        .reread-row {
+            background: rgba(255,255,255,0.03);
             border: 1px solid var(--border-glass);
-            padding: 12px 16px;
+            padding: 12px;
             border-radius: 14px;
             margin-bottom: 14px;
             display: flex;
@@ -355,141 +315,167 @@
             align-items: center;
         }
 
-        .counter-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 4px 10px;
-            border-radius: 20px;
-            border: 1px solid var(--border-glass);
-        }
-
-        .counter-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: #fff;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            font-weight: 700;
+        .re-reading-toggle {
+            background: rgba(132, 204, 22, 0.12);
+            border: 1px solid rgba(163, 230, 53, 0.3);
+            color: #a3e635;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
             cursor: pointer;
+            margin-bottom: 14px;
+            width: 100%;
+            text-align: center;
         }
+        .re-reading-toggle.active { background: rgba(132, 204, 22, 0.3); border-color: #a3e635; }
 
-        .status-button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .status-choice-btn {
+        .counter-box { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 20px; border: 1px solid var(--border-glass); }
+        .counter-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; width: 26px; height: 26px; border-radius: 50%; font-weight: 700; cursor: pointer; }
+
+        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .status-btn {
             background: rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border-glass);
             color: var(--text-secondary);
-            padding: 10px 8px;
+            padding: 10px;
             border-radius: 12px;
             font-size: 0.82rem;
             cursor: pointer;
             text-align: center;
         }
-        .status-choice-btn.selected { border-color: var(--accent); color: var(--text-primary); font-weight: 600; background: rgba(255,255,255,0.08); }
+        .status-btn.selected { border-color: var(--accent); color: var(--text-primary); font-weight: 600; background: rgba(255,255,255,0.08); }
 
-        .modal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
         .btn { padding: 10px 18px; border-radius: 12px; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; }
         .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 15px var(--accent-glow); }
-        .btn-secondary { background: rgba(255, 255, 255, 0.08); color: var(--text-primary); border: 1px solid var(--border-glass); }
+        .btn-secondary { background: rgba(255,255,255,0.08); color: var(--text-primary); border: 1px solid var(--border-glass); }
         .btn-danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-        .empty-state { text-align: center; padding: 50px 20px; color: var(--text-muted); font-size: 0.9rem; }
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.88rem; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="aurora-container">
+    <div class="aurora-blob aurora-1"></div>
+    <div class="aurora-blob aurora-2"></div>
+</div>
+
+<div class="app-shell">
     <header>
-        <div class="brand">
-            <h1>NeuLibrar <span class="version-tag">v2.5</span></h1>
-        </div>
-        <!-- 3'lü Üst Navigasyon Sekmeleri -->
-        <div class="nav-tabs">
-            <button class="nav-tab-btn" onclick="switchView('categories')">Kategoriler</button>
-            <button class="nav-tab-btn active" onclick="switchView('home')">Kitaplar</button>
-            <button class="nav-tab-btn" onclick="switchView('settings')">Ayarlar</button>
+        <div class="brand-title">NeuLibrar</div>
+        <div class="dots-indicator">
+            <div class="dot" id="dot-0"></div>
+            <div class="dot active" id="dot-1"></div>
+            <div class="dot" id="dot-2"></div>
         </div>
     </header>
 
-    <!-- SAYFA 1: KATEGORİLER & İSTATİSTİKLER -->
-    <div class="view-panel" id="view-categories">
-        <div class="categories-grid">
-            <div class="cat-card" onclick="filterFromCategory('read')">
-                <div class="cat-num" id="cat-count-read">0</div>
-                <div class="cat-title">✓ Okundu</div>
-                <div class="cat-desc">Tamamlanan eserler</div>
-            </div>
-            <div class="cat-card" onclick="filterFromCategory('reading')">
-                <div class="cat-num" id="cat-count-reading">0</div>
-                <div class="cat-title">📖 Okunuyor</div>
-                <div class="cat-desc">Şu an okunanlar</div>
-            </div>
-            <div class="cat-card" onclick="filterFromCategory('re-reading')">
-                <div class="cat-num" id="cat-count-re-reading">0</div>
-                <div class="cat-title">🔄 Tekrar Okunuyor</div>
-                <div class="cat-desc">İkinci/üçüncü turdakiler</div>
-            </div>
-            <div class="cat-card" onclick="filterFromCategory('reread-plan')">
-                <div class="cat-num" id="cat-count-reread-plan">0</div>
-                <div class="cat-title">📌 Yeniden Okunacak</div>
-                <div class="cat-desc">Tekrar okunmayı bekleyenler</div>
-            </div>
-            <div class="cat-card" style="grid-column: span 2;" onclick="filterFromCategory('plan')">
-                <div class="cat-num" id="cat-count-plan">0</div>
-                <div class="cat-title">⏳ Okunacak</div>
-                <div class="cat-desc">İstek ve plan listesindeki eserler</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SAYFA 2: ANA SAYFA (TÜM KİTAPLAR) -->
-    <div class="view-panel active" id="view-home">
-        <div class="sort-scroll-container">
-            <button class="sort-chip active" id="sort-no-asc" onclick="setSort('no-asc')">№ 1 → 99</button>
-            <button class="sort-chip" id="sort-no-desc" onclick="setSort('no-desc')">№ 99 → 1</button>
-            <button class="sort-chip" id="sort-title-asc" onclick="setSort('title-asc')">Eser (A → Z)</button>
-            <button class="sort-chip" id="sort-author-asc" onclick="setSort('author-asc')">Yazar (A → Z)</button>
-        </div>
-        <div class="book-list" id="bookList"></div>
-    </div>
-
-    <!-- SAYFA 3: AYARLAR -->
-    <div class="view-panel" id="view-settings">
-        <div class="settings-section">
-            <div class="settings-title">Renk Paleti (Accent Theme)</div>
-            <div class="color-palette">
-                <div class="color-dot active" style="background:#6366f1;" onclick="setThemeColor('#6366f1', 'rgba(99, 102, 241, 0.35)')"></div>
-                <div class="color-dot" style="background:#10b981;" onclick="setThemeColor('#10b981', 'rgba(16, 185, 129, 0.35)')"></div>
-                <div class="color-dot" style="background:#06b6d4;" onclick="setThemeColor('#06b6d4', 'rgba(6, 182, 212, 0.35)')"></div>
-                <div class="color-dot" style="background:#f97316;" onclick="setThemeColor('#f97316', 'rgba(249, 115, 22, 0.35)')"></div>
-                <div class="color-dot" style="background:#ec4899;" onclick="setThemeColor('#ec4899', 'rgba(236, 72, 153, 0.35)')"></div>
+    <div class="views-viewport" id="viewport">
+        <!-- SAYFA 0: KATEGORİLER -->
+        <div class="view-page" id="page-0">
+            <div class="categories-stack">
+                <div class="cat-card" onclick="openCategoryDrawer('read', '✓ Okundu')">
+                    <div class="cat-header">
+                        <span class="cat-name">✓ Okundu</span>
+                        <span class="cat-count" id="cat-cnt-read">0</span>
+                    </div>
+                    <div class="cat-previews" id="cat-prev-read"></div>
+                </div>
+                <div class="cat-card" onclick="openCategoryDrawer('reading', '📖 Okunuyor')">
+                    <div class="cat-header">
+                        <span class="cat-name">📖 Okunuyor</span>
+                        <span class="cat-count" id="cat-cnt-reading">0</span>
+                    </div>
+                    <div class="cat-previews" id="cat-prev-reading"></div>
+                </div>
+                <div class="cat-card" onclick="openCategoryDrawer('re-reading', '🔄 Tekrar Okunuyor')">
+                    <div class="cat-header">
+                        <span class="cat-name">🔄 Tekrar Okunuyor</span>
+                        <span class="cat-count" id="cat-cnt-re-reading">0</span>
+                    </div>
+                    <div class="cat-previews" id="cat-prev-re-reading"></div>
+                </div>
+                <div class="cat-card" onclick="openCategoryDrawer('reread-plan', '📌 Yeniden Okunacak')">
+                    <div class="cat-header">
+                        <span class="cat-name">📌 Yeniden Okunacak</span>
+                        <span class="cat-count" id="cat-cnt-reread-plan">0</span>
+                    </div>
+                    <div class="cat-previews" id="cat-prev-reread-plan"></div>
+                </div>
+                <div class="cat-card" onclick="openCategoryDrawer('plan', '⏳ Okunacak')">
+                    <div class="cat-header">
+                        <span class="cat-name">⏳ Okunacak</span>
+                        <span class="cat-count" id="cat-cnt-plan">0</span>
+                    </div>
+                    <div class="cat-previews" id="cat-prev-plan"></div>
+                </div>
             </div>
         </div>
 
-        <div class="settings-section">
-            <div class="settings-title">Görünüm Modu</div>
-            <button class="btn btn-secondary" onclick="toggleTheme()">Karanlık / Aydınlık Mod</button>
+        <!-- SAYFA 1: ANA VİTRİN (KİTAPLAR) -->
+        <div class="view-page" id="page-1">
+            <div class="sort-row">
+                <button class="sort-btn active" id="sort-no-asc" onclick="setSort('no-asc')">№ 1 → 99</button>
+                <button class="sort-btn" id="sort-no-desc" onclick="setSort('no-desc')">№ 99 → 1</button>
+                <button class="sort-btn" id="sort-title-asc" onclick="setSort('title-asc')">Eser (A → Z)</button>
+                <button class="sort-btn" id="sort-author-asc" onclick="setSort('author-asc')">Yazar (A → Z)</button>
+            </div>
+            <div class="book-list" id="mainBookList"></div>
         </div>
 
-        <div class="settings-section">
-            <div class="settings-title">Yedekleme & Veri Yönetimi</div>
-            <div style="display:flex; gap:10px; flex-direction:column;">
-                <button class="btn btn-primary" onclick="copyBackupToClipboard()">📋 Yedeği Kopyala</button>
-                <button class="btn btn-secondary" onclick="openRestoreArea()">📥 Veri Geri Yükle</button>
+        <!-- SAYFA 2: AYARLAR -->
+        <div class="view-page" id="page-2">
+            <div class="settings-card">
+                <div class="settings-title">Vurgu Rengi Paleti</div>
+                <div class="color-row">
+                    <div class="color-dot active" style="background:#6366f1;" onclick="setThemeColor('#6366f1', 'rgba(99, 102, 241, 0.4)')"></div>
+                    <div class="color-dot" style="background:#10b981;" onclick="setThemeColor('#10b981', 'rgba(16, 185, 129, 0.4)')"></div>
+                    <div class="color-dot" style="background:#06b6d4;" onclick="setThemeColor('#06b6d4', 'rgba(6, 182, 212, 0.4)')"></div>
+                    <div class="color-dot" style="background:#f97316;" onclick="setThemeColor('#f97316', 'rgba(249, 115, 22, 0.4)')"></div>
+                    <div class="color-dot" style="background:#ec4899;" onclick="setThemeColor('#ec4899', 'rgba(236, 72, 153, 0.4)')"></div>
+                </div>
             </div>
-            <div id="restoreArea" style="display:none; margin-top:10px;">
-                <textarea id="restoreText" style="width:100%; height:70px; background:rgba(0,0,0,0.2); border:1px solid var(--border-glass); border-radius:10px; color:#fff; font-family:'JetBrains Mono'; font-size:0.75rem; padding:8px;"></textarea>
-                <button class="btn btn-primary" style="margin-top:8px; font-size:0.8rem;" onclick="restoreFromText()">Uygula</button>
+
+            <div class="settings-card">
+                <div class="settings-title">Görünüm Modu</div>
+                <button class="btn btn-secondary" style="width:100%;" onclick="toggleTheme()">Karanlık / Aydınlık Mod Değiştir</button>
+            </div>
+
+            <div class="settings-card">
+                <div class="settings-title">Veri Yedekleme & Aktarım</div>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <button class="btn btn-primary" onclick="copyBackupToClipboard()">📋 Yedeği Panoya Kopyala</button>
+                    <button class="btn btn-secondary" onclick="openRestoreArea()">📥 Veri Geri Yükle</button>
+                </div>
+                <div id="restoreArea" style="display:none; margin-top:10px;">
+                    <textarea id="restoreText" style="width:100%; height:70px; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); border-radius:10px; color:#fff; font-family:'JetBrains Mono'; font-size:0.75rem; padding:8px;"></textarea>
+                    <button class="btn btn-primary" style="margin-top:8px; width:100%; font-size:0.8rem;" onclick="restoreFromText()">Geri Yüklemeyi Uygula</button>
+                </div>
+            </div>
+
+            <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.78rem; font-family:'JetBrains Mono';">
+                NeuLibrar v3.0 — Kişisel Okuma Arşivi
             </div>
         </div>
     </div>
 </div>
 
-<!-- Alt Yüzen Kapsül (Floating Glass Pill) -->
-<div class="floating-capsule">
-    <input type="text" class="capsule-input" id="searchInput" placeholder="Eser, yazar veya not ara..." oninput="renderBooks()">
-    <button class="capsule-add-btn" onclick="openBookModal()">+ Ekle</button>
+<!-- Yüzen Kapsül (Floating Pill Dock) -->
+<div class="pill-dock" id="pillDock">
+    <div class="pill-search-trigger" onclick="toggleSearchExpand()">🔍</div>
+    <input type="text" class="pill-input" id="searchInput" placeholder="Eser, yazar veya not ara..." oninput="renderMainBooks()">
+    <button class="pill-add-btn" onclick="openBookModal()">+ Ekle</button>
+</div>
+
+<!-- Bağımsız Kategori Detay Çekmecesi -->
+<div class="modal-overlay" id="categoryDrawer">
+    <div class="modal">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <h2 id="drawerTitle" style="font-size:1.05rem;">Kategori</h2>
+            <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.78rem;" onclick="closeCategoryDrawer()">Kapat</button>
+        </div>
+        <div class="book-list" id="drawerBookList"></div>
+    </div>
 </div>
 
 <!-- Kitap Ekle/Düzenle Modal -->
@@ -510,12 +496,14 @@
             <input type="text" id="bookAuthor" placeholder="Örn: Haruki Murakami">
         </div>
         
-        <!-- Tekrar Okunma Geçmişi Sayacı -->
-        <div class="reread-box">
-            <div>
-                <span style="font-size:0.85rem; font-weight:600;" id="readInfoText">Bu eser 1 kez okundu</span>
-            </div>
-            <div class="counter-controls">
+        <!-- Bağımsız Tekrar Okuma Toggle & Sayacı -->
+        <button type="button" class="re-reading-toggle" id="reReadingToggleBtn" onclick="toggleReReadingState()">
+            🔄 Şu An Tekrar Okuyorum
+        </button>
+
+        <div class="reread-row">
+            <span style="font-size:0.84rem; font-weight:600;" id="readInfoText">Bu eser 1 kez okundu</span>
+            <div class="counter-box">
                 <button type="button" class="counter-btn" onclick="adjustReadCount(-1)">-</button>
                 <span style="font-family:'JetBrains Mono'; font-weight:700;" id="readCountLabel">1</span>
                 <button type="button" class="counter-btn" onclick="adjustReadCount(1)">+</button>
@@ -523,21 +511,20 @@
         </div>
 
         <div class="form-group">
-            <label>Durum Seç</label>
+            <label>Ana Durum Seç</label>
             <input type="hidden" id="bookStatus" value="read">
-            <div class="status-button-grid">
-                <button type="button" class="status-choice-btn selected" data-status="read" onclick="selectStatus('read')">✓ Okundu</button>
-                <button type="button" class="status-choice-btn" data-status="reading" onclick="selectStatus('reading')">📖 Okunuyor</button>
-                <button type="button" class="status-choice-btn" data-status="re-reading" onclick="selectStatus('re-reading')">🔄 Tekrar Okunuyor</button>
-                <button type="button" class="status-choice-btn" data-status="reread-plan" onclick="selectStatus('reread-plan')">📌 Yeniden Okunacak</button>
-                <button type="button" class="status-choice-btn" style="grid-column: span 2;" data-status="plan" onclick="selectStatus('plan')">⏳ Okunacak</button>
+            <div class="status-grid">
+                <button type="button" class="status-btn selected" data-status="read" onclick="selectStatus('read')">✓ Okundu</button>
+                <button type="button" class="status-btn" data-status="reading" onclick="selectStatus('reading')">📖 Okunuyor</button>
+                <button type="button" class="status-btn" data-status="reread-plan" onclick="selectStatus('reread-plan')">📌 Yeniden Okunacak</button>
+                <button type="button" class="status-btn" data-status="plan" onclick="selectStatus('plan')">⏳ Okunacak</button>
             </div>
         </div>
         <div class="form-group">
             <label>Notlar (İsteğe bağlı)</label>
             <textarea id="bookNotes" placeholder="Çevirmen notu, okuma tarihi veya düşünce..."></textarea>
         </div>
-        <div class="modal-actions">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:18px;">
             <button class="btn btn-danger" id="deleteBtn" style="display:none;" onclick="deleteBook()">Sil</button>
             <div style="display:flex; gap:8px; margin-left:auto;">
                 <button class="btn btn-secondary" onclick="closeBookModal()">İptal</button>
@@ -549,132 +536,174 @@
 
 <script>
     const INITIAL_BOOKS = [
-        { id: 1, no: 1, title: "Ütopya", author: "Thomas More", status: "read", readCount: 1, notes: "" },
-        { id: 2, no: 2, title: "Sherlock Holmes: Dörtlerin İmzası", author: "Arthur Conan Doyle", status: "read", readCount: 1, notes: "" },
-        { id: 3, no: 3, title: "Dönüşüm", author: "Franz Kafka", status: "read", readCount: 1, notes: "Eylül 2025 — Okuma serüveninin başlangıcı" },
-        { id: 4, no: 4, title: "Bir Köpeğin Araştırması", author: "Franz Kafka", status: "read", readCount: 1, notes: "" },
-        { id: 5, no: 5, title: "Yabancı", author: "Albert Camus", status: "read", readCount: 1, notes: "" },
-        { id: 6, no: 6, title: "Tersi ve Yüzü", author: "Albert Camus", status: "read", readCount: 1, notes: "" },
-        { id: 7, no: 7, title: "Düşüş", author: "Albert Camus", status: "read", readCount: 1, notes: "" },
-        { id: 8, no: 8, title: "Sürgün ve Krallık", author: "Albert Camus", status: "read", readCount: 1, notes: "" },
-        { id: 9, no: 9, title: "Sisifos Söyleni", author: "Albert Camus", status: "reread-plan", readCount: 1, notes: "Yeniden okunacak" },
-        { id: 10, no: 10, title: "Veba", author: "Albert Camus", status: "read", readCount: 1, notes: "" },
-        { id: 11, no: 11, title: "Başkaldıran İnsan", author: "Albert Camus", status: "reread-plan", readCount: 1, notes: "Yeniden okunacak" },
-        { id: 12, no: 12, title: "Albert Camus ve Başkaldırma Edebiyatı", author: "John Cruickshank", status: "reading", readCount: 1, notes: "Yarısına kadar okundu" },
-        { id: 13, no: 13, title: "Tanrı'yı Gören Köpek", author: "Dino Buzzati", status: "read", readCount: 1, notes: "" },
-        { id: 14, no: 14, title: "Dava", author: "Franz Kafka", status: "read", readCount: 1, notes: "" },
-        { id: 15, no: 15, title: "Şato", author: "Franz Kafka", status: "read", readCount: 1, notes: "" },
-        { id: 16, no: 16, title: "Tatar Çölü", author: "Dino Buzzati", status: "read", readCount: 1, notes: "" },
-        { id: 17, no: 17, title: "Amerika", author: "Franz Kafka", status: "read", readCount: 1, notes: "" },
-        { id: 18, no: 18, title: "Görünmez Kentler", author: "Italo Calvino", status: "read", readCount: 1, notes: "" },
-        { id: 19, no: 19, title: "Beyaz Geceler", author: "Fyodor Dostoyevski", status: "read", readCount: 1, notes: "" },
-        { id: 20, no: 20, title: "Kâtip Bartleby", author: "Herman Melville", status: "read", readCount: 1, notes: "" },
-        { id: 21, no: 21, title: "Bir Delinin Hatıra Defteri", author: "Nikolay Gogol", status: "read", readCount: 1, notes: "" },
-        { id: 22, no: 22, title: "Öteki", author: "Fyodor Dostoyevski", status: "read", readCount: 1, notes: "" },
-        { id: 23, no: 23, title: "Biz", author: "Yevgeni Zamyatin", status: "read", readCount: 1, notes: "" },
-        { id: 24, no: 24, title: "Cesur Yeni Dünya", author: "Aldous Huxley", status: "read", readCount: 1, notes: "" },
-        { id: 25, no: 25, title: "Çağdaş Bir Ütopya", author: "H.G. Wells", status: "read", readCount: 1, notes: "" },
-        { id: 26, no: 26, title: "Kum Adam", author: "E.T.A. Hoffmann", status: "read", readCount: 1, notes: "" },
-        { id: 27, no: 27, title: "Ficciones", author: "Jorge Luis Borges", status: "read", readCount: 1, notes: "" },
-        { id: 28, no: 28, title: "Hafıza Polisi", author: "Yōko Ogawa", status: "read", readCount: 1, notes: "" },
-        { id: 29, no: 29, title: "Kutu Adam", author: "Kōbō Abe", status: "read", readCount: 1, notes: "" },
-        { id: 30, no: 30, title: "Rüyanın Öte Yakası", author: "Ursula K. Le Guin", status: "read", readCount: 1, notes: "" },
-        { id: 31, no: 31, title: "Geliş", author: "Ted Chiang", status: "read", readCount: 1, notes: "" },
-        { id: 32, no: 32, title: "Mars Yıllıkları", author: "Ray Bradbury", status: "read", readCount: 1, notes: "" },
-        { id: 33, no: 33, title: "Siddhartha", author: "Hermann Hesse", status: "read", readCount: 1, notes: "" },
-        { id: 34, no: 34, title: "Morel'in Buluşu", author: "Adolfo Bioy Casares", status: "read", readCount: 1, notes: "" },
-        { id: 35, no: 35, title: "Karanlıktan Sonra", author: "Haruki Murakami", status: "read", readCount: 1, notes: "" },
-        { id: 36, no: 36, title: "Sputnik Sevgilim", author: "Haruki Murakami", status: "read", readCount: 1, notes: "" },
-        { id: 37, no: 37, title: "Haşlanmış Harikalar Diyarı ve Dünyanın Sonu", author: "Haruki Murakami", status: "read", readCount: 1, notes: "" },
-        { id: 38, no: 38, title: "Profesör ve Hizmetçi", author: "Yōko Ogawa", status: "read", readCount: 1, notes: "" },
-        { id: 39, no: 39, title: "Bir Kutup Ayısının Anıları", author: "Yoko Tawada", status: "read", readCount: 1, notes: "" },
-        { id: 40, no: 40, title: "Sür Pulluğunu Kemiklerin Üzerinde", author: "Olga Tokarczuk", status: "read", readCount: 1, notes: "" },
-        { id: 41, no: 41, title: "UBIK", author: "Philip K. Dick", status: "reading", readCount: 1, notes: "" },
-        { id: 42, no: 42, title: "Tanrı Olmak İsteyen Otobüs Şoförü", author: "Etgar Keret", status: "plan", readCount: 1, notes: "" }
+        { id: 1, no: 1, title: "Ütopya", author: "Thomas More", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 2, no: 2, title: "Sherlock Holmes: Dörtlerin İmzası", author: "Arthur Conan Doyle", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 3, no: 3, title: "Dönüşüm", author: "Franz Kafka", status: "read", readCount: 1, isReReading: false, notes: "Eylül 2025 — Okuma serüveninin başlangıcı" },
+        { id: 4, no: 4, title: "Bir Köpeğin Araştırması", author: "Franz Kafka", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 5, no: 5, title: "Yabancı", author: "Albert Camus", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 6, no: 6, title: "Tersi ve Yüzü", author: "Albert Camus", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 7, no: 7, title: "Düşüş", author: "Albert Camus", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 8, no: 8, title: "Sürgün ve Krallık", author: "Albert Camus", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 9, no: 9, title: "Sisifos Söyleni", author: "Albert Camus", status: "reread-plan", readCount: 1, isReReading: false, notes: "Yeniden okunacak" },
+        { id: 10, no: 10, title: "Veba", author: "Albert Camus", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 11, no: 11, title: "Başkaldıran İnsan", author: "Albert Camus", status: "reread-plan", readCount: 1, isReReading: false, notes: "Yeniden okunacak" },
+        { id: 12, no: 12, title: "Albert Camus ve Başkaldırma Edebiyatı", author: "John Cruickshank", status: "reading", readCount: 1, isReReading: false, notes: "Yarısına kadar okundu" },
+        { id: 13, no: 13, title: "Tanrı'yı Gören Köpek", author: "Dino Buzzati", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 14, no: 14, title: "Dava", author: "Franz Kafka", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 15, no: 15, title: "Şato", author: "Franz Kafka", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 16, no: 16, title: "Tatar Çölü", author: "Dino Buzzati", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 17, no: 17, title: "Amerika", author: "Franz Kafka", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 18, no: 18, title: "Görünmez Kentler", author: "Italo Calvino", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 19, no: 19, title: "Beyaz Geceler", author: "Fyodor Dostoyevski", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 20, no: 20, title: "Kâtip Bartleby", author: "Herman Melville", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 21, no: 21, title: "Bir Delinin Hatıra Defteri", author: "Nikolay Gogol", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 22, no: 22, title: "Öteki", author: "Fyodor Dostoyevski", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 23, no: 23, title: "Biz", author: "Yevgeni Zamyatin", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 24, no: 24, title: "Cesur Yeni Dünya", author: "Aldous Huxley", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 25, no: 25, title: "Çağdaş Bir Ütopya", author: "H.G. Wells", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 26, no: 26, title: "Kum Adam", author: "E.T.A. Hoffmann", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 27, no: 27, title: "Ficciones", author: "Jorge Luis Borges", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 28, no: 28, title: "Hafıza Polisi", author: "Yōko Ogawa", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 29, no: 29, title: "Kutu Adam", author: "Kōbō Abe", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 30, no: 30, title: "Rüyanın Öte Yakası", author: "Ursula K. Le Guin", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 31, no: 31, title: "Geliş", author: "Ted Chiang", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 32, no: 32, title: "Mars Yıllıkları", author: "Ray Bradbury", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 33, no: 33, title: "Siddhartha", author: "Hermann Hesse", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 34, no: 34, title: "Morel'in Buluşu", author: "Adolfo Bioy Casares", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 35, no: 35, title: "Karanlıktan Sonra", author: "Haruki Murakami", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 36, no: 36, title: "Sputnik Sevgilim", author: "Haruki Murakami", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 37, no: 37, title: "Haşlanmış Harikalar Diyarı ve Dünyanın Sonu", author: "Haruki Murakami", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 38, no: 38, title: "Profesör ve Hizmetçi", author: "Yōko Ogawa", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 39, no: 39, title: "Bir Kutup Ayısının Anıları", author: "Yoko Tawada", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 40, no: 40, title: "Sür Pulluğunu Kemiklerin Üzerinde", author: "Olga Tokarczuk", status: "read", readCount: 1, isReReading: false, notes: "" },
+        { id: 41, no: 41, title: "UBIK", author: "Philip K. Dick", status: "reading", readCount: 1, isReReading: false, notes: "" },
+        { id: 42, no: 42, title: "Tanrı Olmak İsteyen Otobüs Şoförü", author: "Etgar Keret", status: "plan", readCount: 1, isReReading: false, notes: "" }
     ];
 
     const STORAGE_KEY = "kisisel_kitaplik_v1";
     let books = [];
-    let currentFilter = "all";
+    let currentViewIdx = 1; // 0: Kat, 1: Vitrin, 2: Ayarlar
     let currentSort = "no-asc";
     let editingReadCount = 1;
+    let editingIsReReading = false;
+
+    // Swipe Gesture Tracking
+    let touchStartX = 0;
+    let touchEndX = 0;
 
     function init() {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
             try {
                 books = JSON.parse(saved);
-                books.forEach(b => { if (!b.readCount) b.readCount = 1; });
+                books.forEach(b => { 
+                    if (!b.readCount) b.readCount = 1; 
+                    if (b.isReReading === undefined) b.isReReading = (b.status === 're-reading');
+                    if (b.status === 're-reading') b.status = 'read';
+                });
             } catch (e) { books = [...INITIAL_BOOKS]; }
         } else {
             books = [...INITIAL_BOOKS];
             saveToStorage();
         }
-        renderBooks();
+        setupGestures();
+        switchView(1);
     }
 
     function saveToStorage() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
-        updateStats();
+        renderCategoriesView();
+        renderMainBooks();
     }
 
-    function updateStats() {
-        document.getElementById("cat-count-read").textContent = books.filter(b => b.status === "read").length;
-        document.getElementById("cat-count-reading").textContent = books.filter(b => b.status === "reading").length;
-        document.getElementById("cat-count-re-reading").textContent = books.filter(b => b.status === "re-reading" || b.readCount > 1).length;
-        document.getElementById("cat-count-reread-plan").textContent = books.filter(b => b.status === "reread-plan").length;
-        document.getElementById("cat-count-plan").textContent = books.filter(b => b.status === "plan").length;
+    /* Gesture & Swipe Handling */
+    function setupGestures() {
+        const vp = document.getElementById('viewport');
+        vp.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+        vp.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
     }
 
-    function switchView(viewName) {
-        document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+    function handleSwipe() {
+        const diff = touchEndX - touchStartX;
+        if (Math.abs(diff) > 50) {
+            if (diff < 0 && currentViewIdx < 2) switchView(currentViewIdx + 1);
+            if (diff > 0 && currentViewIdx > 0) switchView(currentViewIdx - 1);
+        }
+    }
+
+    function switchView(idx) {
+        currentViewIdx = idx;
+        document.getElementById('viewport').style.transform = `translateX(-${idx * 33.333}%)`;
+        for (let i = 0; i < 3; i++) {
+            document.getElementById(`dot-${i}`).classList.toggle('active', i === idx);
+        }
+        if (idx === 0) renderCategoriesView();
+        if (idx === 1) renderMainBooks();
+    }
+
+    /* Categories View (Independent) */
+    function renderCategoriesView() {
+        const getList = (filterFn) => books.filter(filterFn);
+
+        const readList = getList(b => b.status === 'read');
+        const readingList = getList(b => b.status === 'reading');
+        const reReadingList = getList(b => b.isReReading || b.readCount > 1);
+        const rereadPlanList = getList(b => b.status === 'reread-plan');
+        const planList = getList(b => b.status === 'plan');
+
+        document.getElementById('cat-cnt-read').textContent = readList.length;
+        document.getElementById('cat-cnt-reading').textContent = readingList.length;
+        document.getElementById("cat-cnt-re-reading").textContent = reReadingList.length;
+        document.getElementById('cat-cnt-reread-plan').textContent = rereadPlanList.length;
+        document.getElementById('cat-cnt-plan').textContent = planList.length;
+
+        const populateChips = (containerId, list) => {
+            const el = document.getElementById(containerId);
+            if (list.length === 0) { el.innerHTML = '<span class="cat-chip">Eser yok</span>'; return; }
+            el.innerHTML = list.slice(0, 3).map(b => `<span class="cat-chip">${escapeHtml(b.title)}</span>`).join('');
+        };
+
+        populateChips('cat-prev-read', readList);
+        populateChips('cat-prev-reading', readingList);
+        populateChips('cat-prev-re-reading', reReadingList);
+        populateChips('cat-prev-reread-plan', rereadPlanList);
+        populateChips('cat-prev-plan', planList);
+    }
+
+    /* Open Category Drawer (Doesn't corrupt Main Showcase!) */
+    function openCategoryDrawer(key, title) {
+        document.getElementById('drawerTitle').textContent = title;
+        const drawerList = document.getElementById('drawerBookList');
         
-        document.getElementById('view-' + viewName).classList.add('active');
-        
-        const btnIdx = viewName === 'categories' ? 0 : viewName === 'home' ? 1 : 2;
-        document.querySelectorAll('.nav-tab-btn')[btnIdx].classList.add('active');
-    }
-
-    function filterFromCategory(statusKey) {
-        currentFilter = statusKey;
-        switchView('home');
-        renderBooks();
-    }
-
-    function setSort(sortKey) {
-        currentSort = sortKey;
-        document.querySelectorAll(".sort-chip").forEach(el => el.classList.remove("active"));
-        document.getElementById("sort-" + sortKey).classList.add("active");
-        renderBooks();
-    }
-
-    function selectStatus(status) {
-        document.getElementById("bookStatus").value = status;
-        document.querySelectorAll(".status-choice-btn").forEach(btn => {
-            if (btn.getAttribute("data-status") === status) btn.classList.add("selected");
-            else btn.classList.remove("selected");
+        let filtered = books.filter(b => {
+            if (key === 'read') return b.status === 'read';
+            if (key === 'reading') return b.status === 'reading';
+            if (key === 're-reading') return b.isReReading || b.readCount > 1;
+            if (key === 'reread-plan') return b.status === 'reread-plan';
+            if (key === 'plan') return b.status === 'plan';
+            return true;
         });
+
+        if (filtered.length === 0) {
+            drawerList.innerHTML = '<div class="empty-state">Bu kategoride eser bulunmuyor.</div>';
+        } else {
+            drawerList.innerHTML = filtered.map(b => buildBookCardHtml(b)).join('');
+        }
+        document.getElementById('categoryDrawer').classList.add('open');
     }
 
-    function adjustReadCount(delta) {
-        editingReadCount = Math.max(1, editingReadCount + delta);
-        document.getElementById("readCountLabel").textContent = editingReadCount;
-        document.getElementById("readInfoText").textContent = `Bu eser ${editingReadCount} kez okundu`;
-    }
+    function closeCategoryDrawer() { document.getElementById('categoryDrawer').classList.remove('open'); }
 
-    function renderBooks() {
-        updateStats();
+    /* Main Showcase Rendering (Pristine #1 to #N) */
+    function renderMainBooks() {
+        renderCategoriesView();
         const query = document.getElementById("searchInput").value.toLowerCase().trim();
-        const listEl = document.getElementById("bookList");
+        const listEl = document.getElementById("mainBookList");
 
         let filtered = books.filter(b => {
-            if (currentFilter === "read" && b.status !== "read") return false;
-            if (currentFilter === "reading" && b.status !== "reading") return false;
-            if (currentFilter === "re-reading" && (b.status !== "re-reading" && b.readCount <= 1)) return false;
-            if (currentFilter === "reread-plan" && b.status !== "reread-plan") return false;
-            if (currentFilter === "plan" && b.status !== "plan") return false;
-
             if (!query) return true;
             return (
                 b.title.toLowerCase().includes(query) ||
@@ -697,30 +726,52 @@
             return;
         }
 
-        listEl.innerHTML = filtered.map(b => {
-            let statusLabel = "✓ Okundu";
-            let statusClass = "badge-read";
-            if (b.status === "reading") { statusLabel = "📖 Okunuyor"; statusClass = "badge-reading"; }
-            else if (b.status === "re-reading") { statusLabel = "🔄 Tekrar Okunuyor"; statusClass = "badge-rereading"; }
-            else if (b.status === "reread-plan") { statusLabel = "📌 Yeniden Okunacak"; statusClass = "badge-reread-plan"; }
-            else if (b.status === "plan") { statusLabel = "⏳ Okunacak"; statusClass = "badge-plan"; }
-
-            return `
-                <div class="book-item" onclick="openBookModal(${b.id})">
-                    <div class="book-no">${b.no}</div>
-                    <div class="book-info">
-                        <div class="book-title">${escapeHtml(b.title)}</div>
-                        <div class="book-author">${escapeHtml(b.author)}</div>
-                        ${b.notes ? `<div class="book-note">${escapeHtml(b.notes)}</div>` : ''}
-                    </div>
-                    <div>
-                        <span class="badge ${statusClass}">${statusLabel}</span>
-                    </div>
-                </div>
-            `;
-        }).join("");
+        listEl.innerHTML = filtered.map(b => buildBookCardHtml(b)).join("");
     }
 
+    function buildBookCardHtml(b) {
+        let statusLabel = "✓ Okundu";
+        let statusClass = "badge-read";
+        if (b.status === "reading") { statusLabel = "📖 Okunuyor"; statusClass = "badge-reading"; }
+        else if (b.status === "reread-plan") { statusLabel = "📌 Yeniden Okunacak"; statusClass = "badge-reread-plan"; }
+        else if (b.status === "plan") { statusLabel = "⏳ Okunacak"; statusClass = "badge-plan"; }
+
+        const reReadingBadge = b.isReReading 
+            ? `<span class="badge badge-re-reading">🔄 Tekrar Okunuyor</span>` 
+            : '';
+
+        return `
+            <div class="book-card" onclick="openBookModal(${b.id})">
+                <div class="book-no">${b.no}</div>
+                <div>
+                    <div class="book-title">${escapeHtml(b.title)}</div>
+                    <div class="book-author">${escapeHtml(b.author)}</div>
+                    ${b.notes ? `<div class="book-note">${escapeHtml(b.notes)}</div>` : ''}
+                </div>
+                <div class="badges-wrapper">
+                    ${reReadingBadge}
+                    <span class="badge ${statusClass}">${statusLabel}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    function setSort(sortKey) {
+        currentSort = sortKey;
+        document.querySelectorAll(".sort-btn").forEach(el => el.classList.remove("active"));
+        document.getElementById("sort-" + sortKey).classList.add("active");
+        renderMainBooks();
+    }
+
+    function toggleSearchExpand() {
+        const dock = document.getElementById('pillDock');
+        dock.classList.toggle('expanded');
+        if (dock.classList.contains('expanded')) {
+            document.getElementById('searchInput').focus();
+        }
+    }
+
+    /* Modal Logic */
     function openBookModal(id = null) {
         const modal = document.getElementById("bookModal");
         const deleteBtn = document.getElementById("deleteBtn");
@@ -737,8 +788,7 @@
             document.getElementById("bookNotes").value = book.notes || "";
             
             editingReadCount = book.readCount || 1;
-            document.getElementById("readCountLabel").textContent = editingReadCount;
-            document.getElementById("readInfoText").textContent = `Bu eser ${editingReadCount} kez okundu`;
+            editingIsReReading = !!book.isReReading;
             deleteBtn.style.display = "block";
         } else {
             const nextNo = books.length > 0 ? Math.max(...books.map(b => b.no)) + 1 : 1;
@@ -750,14 +800,39 @@
             selectStatus("reading");
             document.getElementById("bookNotes").value = "";
             editingReadCount = 1;
-            document.getElementById("readCountLabel").textContent = 1;
-            document.getElementById("readInfoText").textContent = "Bu eser 1 kez okundu";
+            editingIsReReading = false;
             deleteBtn.style.display = "none";
         }
+        updateModalCounterUI();
         modal.classList.add("open");
     }
 
+    function toggleReReadingState() {
+        editingIsReReading = !editingIsReReading;
+        updateModalCounterUI();
+    }
+
+    function adjustReadCount(delta) {
+        editingReadCount = Math.max(1, editingReadCount + delta);
+        updateModalCounterUI();
+    }
+
+    function updateModalCounterUI() {
+        document.getElementById("readCountLabel").textContent = editingReadCount;
+        document.getElementById("readInfoText").textContent = `Bu eser ${editingReadCount} kez okundu`;
+        const toggleBtn = document.getElementById("reReadingToggleBtn");
+        toggleBtn.classList.toggle("active", editingIsReReading);
+    }
+
     function closeBookModal() { document.getElementById("bookModal").classList.remove("open"); }
+
+    function selectStatus(status) {
+        document.getElementById("bookStatus").value = status;
+        document.querySelectorAll(".status-btn").forEach(btn => {
+            if (btn.getAttribute("data-status") === status) btn.classList.add("selected");
+            else btn.classList.remove("selected");
+        });
+    }
 
     function saveBook() {
         const idVal = document.getElementById("bookId").value;
@@ -772,14 +847,13 @@
         if (idVal) {
             const idx = books.findIndex(b => b.id === parseInt(idVal));
             if (idx > -1) {
-                books[idx] = { ...books[idx], no, title, author: author || "Bilinmiyor", status, notes, readCount: editingReadCount };
+                books[idx] = { ...books[idx], no, title, author: author || "Bilinmiyor", status, notes, readCount: editingReadCount, isReReading: editingIsReReading };
             }
         } else {
-            books.push({ id: Date.now(), no, title, author: author || "Bilinmiyor", status, notes, readCount: 1 });
+            books.push({ id: Date.now(), no, title, author: author || "Bilinmiyor", status, notes, readCount: 1, isReReading: false });
         }
 
         saveToStorage();
-        renderBooks();
         closeBookModal();
     }
 
@@ -788,7 +862,6 @@
         if (idVal && confirm("Bu kitabı silmek istediğine emin misin?")) {
             books = books.filter(b => b.id !== idVal);
             saveToStorage();
-            renderBooks();
             closeBookModal();
         }
     }
@@ -802,11 +875,8 @@
 
     function toggleTheme() {
         const current = document.documentElement.getAttribute("data-theme");
-        if (current === "light") {
-            document.documentElement.removeAttribute("data-theme");
-        } else {
-            document.documentElement.setAttribute("data-theme", "light");
-        }
+        if (current === "light") document.documentElement.removeAttribute("data-theme");
+        else document.documentElement.setAttribute("data-theme", "light");
     }
 
     function copyBackupToClipboard() {
@@ -826,7 +896,6 @@
             if (Array.isArray(imported)) {
                 books = imported;
                 saveToStorage();
-                renderBooks();
                 alert("Geri yüklendi!");
             }
         } catch (e) { alert("Geçersiz veri."); }
