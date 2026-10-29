@@ -3,41 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0d0e11">
+    <meta name="theme-color" content="#0a0b0e">
     <title>NeuLibrar</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0d0e11;
-            --bg-glass: rgba(22, 24, 29, 0.65);
-            --bg-glass-hover: rgba(30, 33, 40, 0.75);
-            --bg-modal: rgba(18, 20, 24, 0.85);
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.35);
+            --bg-primary: #0a0b0e;
+            --bg-glass: rgba(255, 255, 255, 0.05);
+            --bg-glass-card: rgba(255, 255, 255, 0.03);
+            --bg-modal: rgba(15, 17, 23, 0.88);
             --text-primary: #f3f4f6;
             --text-secondary: #9ca3af;
             --text-muted: #6b7280;
-            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            --border-glass: rgba(255, 255, 255, 0.08);
-            --border-glass-shine: rgba(255, 255, 255, 0.15);
-            --gloss-shine: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%);
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --border-glass-shine: rgba(255, 255, 255, 0.18);
+            --gloss-line: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
             --danger: #ef4444;
         }
 
         [data-theme="light"] {
-            --bg-primary: #f1f5f9;
-            --bg-glass: rgba(255, 255, 255, 0.7);
-            --bg-glass-hover: rgba(255, 255, 255, 0.85);
-            --bg-modal: rgba(255, 255, 255, 0.9);
+            --bg-primary: #eef2f6;
+            --bg-glass: rgba(255, 255, 255, 0.65);
+            --bg-glass-card: rgba(255, 255, 255, 0.5);
+            --bg-modal: rgba(255, 255, 255, 0.92);
             --text-primary: #0f172a;
             --text-secondary: #475569;
             --text-muted: #94a3b8;
             --border-glass: rgba(0, 0, 0, 0.08);
             --border-glass-shine: rgba(0, 0, 0, 0.15);
-            --gloss-shine: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+            --gloss-line: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -46,28 +47,29 @@
             font-family: 'Inter', -apple-system, sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.5;
-            padding-bottom: 95px;
+            padding-bottom: 110px;
             user-select: none;
+            overflow-x: hidden;
+            min-height: 100vh;
             background-image: 
-                radial-gradient(at 20% 20%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-                radial-gradient(at 80% 80%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+                radial-gradient(circle at 10% 10%, var(--accent-glow) 0px, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.06) 0px, transparent 45%);
             background-attachment: fixed;
         }
 
-        .container { max-width: 920px; margin: 0 auto; padding: 20px 16px; }
+        .container { max-width: 800px; margin: 0 auto; padding: 16px; }
 
+        /* App Header & Top Glass Nav */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border-glass);
+            margin-bottom: 18px;
+            padding-bottom: 12px;
         }
 
         .brand h1 {
-            font-size: 1.45rem;
+            font-size: 1.35rem;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -76,167 +78,127 @@
         }
 
         .version-tag {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             font-family: 'JetBrains Mono', monospace;
-            background: rgba(99, 102, 241, 0.15);
-            color: #818cf8;
-            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--accent);
+            border: 1px solid var(--border-glass);
             padding: 2px 7px;
             border-radius: 20px;
         }
 
-        .brand p { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
-
-        .header-actions { display: flex; gap: 8px; }
-
-        /* Glassmorphic Liquid Buttons */
-        .icon-btn {
+        /* Nav Pills Header Switcher */
+        .nav-tabs {
+            display: flex;
             background: var(--bg-glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-glass);
-            color: var(--text-primary);
-            padding: 8px 14px;
-            border-radius: 12px;
+            padding: 4px;
+            border-radius: 30px;
+            gap: 4px;
+        }
+
+        .nav-tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 0.82rem;
-            font-weight: 500;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
         }
 
-        .icon-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--gloss-shine);
-            pointer-events: none;
+        .nav-tab-btn.active {
+            background: var(--accent);
+            color: #ffffff;
+            box-shadow: 0 4px 15px var(--accent-glow);
         }
 
-        .icon-btn:active { transform: scale(0.95); }
+        /* View Switching Containers */
+        .view-panel { display: none; animation: fadeIn 0.25s ease-out; }
+        .view-panel.active { display: block; }
 
-        /* 5-Column Stats Grid */
-        .stats-grid {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glass Cards for Categories View */
+        .categories-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            margin-bottom: 18px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 10px;
         }
 
-        .stat-card {
-            background: var(--bg-glass);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+        .cat-card {
+            background: var(--bg-glass-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-glass);
-            padding: 10px 6px;
-            border-radius: 14px;
-            text-align: center;
+            border-radius: 18px;
+            padding: 18px;
             cursor: pointer;
             position: relative;
             overflow: hidden;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--gloss-shine);
-            pointer-events: none;
-        }
+        .cat-card::before { content: ''; position: absolute; inset: 0; background: var(--gloss-line); pointer-events: none; }
+        .cat-card:active { transform: scale(0.97); }
 
-        .stat-card.active {
-            border-color: rgba(99, 102, 241, 0.5);
-            background: rgba(99, 102, 241, 0.12);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
-        }
+        .cat-num { font-family: 'JetBrains Mono', monospace; font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+        .cat-title { font-size: 0.9rem; font-weight: 600; margin-top: 6px; color: var(--text-primary); }
+        .cat-desc { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; }
 
-        .stat-num {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.25rem;
-            font-weight: 700;
-            display: block;
-        }
-
-        .stat-label { font-size: 0.68rem; color: var(--text-secondary); margin-top: 2px; display: block; white-space: nowrap; }
-
-        /* Search Box */
-        .search-box { margin-bottom: 14px; }
-        .search-box input {
-            width: 100%;
-            background: var(--bg-glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border-glass);
-            color: var(--text-primary);
-            padding: 12px 16px;
-            border-radius: 14px;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .search-box input:focus { border-color: rgba(99, 102, 241, 0.6); }
-
-        /* Sort Pills */
-        .sort-scroll-container { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 14px; scrollbar-width: none; }
+        /* Sort Pills Scroll */
+        .sort-scroll-container { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
         .sort-chip {
-            background: var(--bg-glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border-glass);
-            color: var(--text-secondary);
-            padding: 7px 14px;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 500;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .sort-chip.active {
-            background: var(--accent-gradient);
-            color: #fff;
-            border-color: transparent;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
-        }
-
-        /* Book List & Glass Items */
-        .book-list { display: flex; flex-direction: column; gap: 10px; }
-
-        .book-item {
             background: var(--bg-glass);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-glass);
-            border-radius: 14px;
-            padding: 13px 16px;
+            color: var(--text-secondary);
+            padding: 6px 13px;
+            border-radius: 20px;
+            font-size: 0.76rem;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .sort-chip.active { background: var(--accent); color: #fff; border-color: transparent; }
+
+        /* Book List & Clean Items */
+        .book-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .book-item {
+            background: var(--bg-glass-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 14px 16px;
             display: grid;
-            grid-template-columns: 38px 1fr auto;
+            grid-template-columns: 36px 1fr auto;
             align-items: center;
             gap: 12px;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: transform 0.15s, border-color 0.2s;
+            transition: transform 0.15s;
         }
 
-        .book-item::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--gloss-shine);
-            pointer-events: none;
-        }
-
+        .book-item::before { content: ''; position: absolute; inset: 0; background: var(--gloss-line); pointer-events: none; }
         .book-item:active { transform: scale(0.98); }
 
         .book-no {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            font-weight: 600;
+            font-weight: 700;
             text-align: center;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border-glass);
@@ -244,105 +206,110 @@
             border-radius: 8px;
         }
 
-        .book-title { font-weight: 600; font-size: 0.96rem; color: var(--text-primary); }
-        .book-author { font-size: 0.82rem; color: var(--text-secondary); margin-top: 1px; }
+        .book-title { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); }
+        .book-author { font-size: 0.81rem; color: var(--text-secondary); margin-top: 1px; }
         .book-note {
-            font-size: 0.76rem;
+            font-size: 0.75rem;
             color: #fcd34d;
             margin-top: 5px;
-            padding: 3px 9px;
+            padding: 3px 8px;
             background: rgba(245, 158, 11, 0.12);
-            border: 1px solid rgba(245, 158, 11, 0.25);
+            border: 1px solid rgba(245, 158, 11, 0.2);
             border-radius: 6px;
             display: inline-block;
         }
 
-        /* Liquid Glass Frutiger Aero Badges */
-        .badges-container { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
-
+        /* Glass Badges */
         .badge {
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             font-weight: 600;
             padding: 6px 12px;
             border-radius: 20px;
             white-space: nowrap;
+            backdrop-filter: blur(10px);
             border: 1px solid transparent;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            position: relative;
-            overflow: hidden;
         }
 
-        .badge::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
-            pointer-events: none;
-        }
+        .badge-read { background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(52, 211, 153, 0.3); }
+        .badge-reading { background: rgba(14, 165, 233, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); }
+        .badge-rereading { background: rgba(132, 204, 22, 0.15); color: #a3e635; border-color: rgba(163, 230, 53, 0.3); }
+        .badge-reread-plan { background: rgba(217, 70, 239, 0.15); color: #f0abfc; border-color: rgba(240, 171, 252, 0.3); }
+        .badge-plan { background: rgba(249, 115, 22, 0.15); color: #fb923c; border-color: rgba(251, 146, 60, 0.3); }
 
-        /* Okundu - Zümrüt Yeşili */
-        .badge-read {
-            background: rgba(16, 185, 129, 0.16);
-            color: #34d399;
-            border-color: rgba(52, 211, 153, 0.35);
-        }
-
-        /* Okunuyor - Okyanus Mavisi */
-        .badge-reading {
-            background: rgba(14, 165, 233, 0.16);
-            color: #38bdf8;
-            border-color: rgba(56, 189, 248, 0.35);
-        }
-
-        /* Tekrar Okunuyor / xN Tekrar - Fıstık Yeşili Parlak Cam */
-        .badge-reread-count {
-            background: rgba(132, 204, 22, 0.18);
-            color: #a3e635;
-            border-color: rgba(163, 230, 53, 0.4);
-        }
-
-        /* Yeniden / Plan - Macenta / Mor-Kırmızı */
-        .badge-reread {
-            background: rgba(217, 70, 239, 0.16);
-            color: #f0abfc;
-            border-color: rgba(240, 171, 252, 0.35);
-        }
-
-        /* Okunacak - Mercan Kırmızısı */
-        .badge-plan {
-            background: rgba(249, 115, 22, 0.16);
-            color: #fb923c;
-            border-color: rgba(251, 146, 60, 0.35);
-        }
-
-        /* Floating Action Button */
-        .fab {
+        /* Floating Integrated Capsule (Hap Tasarım) */
+        .floating-capsule {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--accent-gradient);
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 520px;
+            background: var(--bg-modal);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border-glass-shine);
+            border-radius: 40px;
+            padding: 6px 8px 6px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+            z-index: 80;
+        }
+
+        .capsule-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 0.88rem;
+            outline: none;
+        }
+
+        .capsule-add-btn {
+            background: var(--accent);
             color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            padding: 14px 22px;
-            font-size: 0.92rem;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 0.84rem;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
-            z-index: 50;
-            transition: transform 0.15s;
+            box-shadow: 0 4px 15px var(--accent-glow);
+            white-space: nowrap;
         }
-        .fab:active { transform: scale(0.94); }
 
-        /* Modal Pencereleri */
+        /* Settings View Styles */
+        .settings-section {
+            background: var(--bg-glass-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 14px;
+        }
+
+        .settings-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); }
+
+        .color-palette { display: flex; gap: 12px; }
+        .color-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s;
+        }
+        .color-dot:active { transform: scale(0.9); }
+        .color-dot.active { border-color: #ffffff; box-shadow: 0 0 12px rgba(255, 255, 255, 0.4); }
+
+        /* Modal Structure */
         .modal-overlay {
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -354,108 +321,80 @@
         .modal {
             background: var(--bg-modal);
             border: 1px solid var(--border-glass-shine);
-            border-radius: 20px;
+            border-radius: 22px;
             width: 100%;
             max-width: 440px;
             padding: 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
             max-height: 90vh;
             overflow-y: auto;
         }
 
-        .modal h2 { font-size: 1.15rem; margin-bottom: 18px; }
-
         .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 500; }
+        .form-group label { display: block; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 500; }
         .form-group input, .form-group textarea {
             width: 100%;
             background: rgba(0, 0, 0, 0.25);
             border: 1px solid var(--border-glass);
             color: var(--text-primary);
             padding: 11px 14px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 0.9rem;
             outline: none;
         }
 
-        /* İnteraktif Tekrar Okuma Sayacı Kutusu */
+        /* Read Counter Area inside Modal */
         .reread-box {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-glass);
             padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 16px;
+            border-radius: 14px;
+            margin-bottom: 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .reread-counter-controls {
+        .counter-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             background: rgba(0, 0, 0, 0.3);
-            padding: 4px 8px;
+            padding: 4px 10px;
             border-radius: 20px;
             border: 1px solid var(--border-glass);
         }
 
         .counter-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border-glass);
-            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
             width: 28px;
             height: 28px;
             border-radius: 50%;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        .counter-btn:active { transform: scale(0.9); }
-
-        .counter-num {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: #a3e635;
-            min-width: 20px;
-            text-align: center;
-        }
-
-        /* Status Grid */
         .status-button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .status-choice-btn {
             background: rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border-glass);
             color: var(--text-secondary);
             padding: 10px 8px;
-            border-radius: 10px;
-            font-size: 0.84rem;
+            border-radius: 12px;
+            font-size: 0.82rem;
             cursor: pointer;
             text-align: center;
-            transition: all 0.15s;
         }
-        .status-choice-btn.selected[data-status="read"] { background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: #34d399; font-weight: 600; }
-        .status-choice-btn.selected[data-status="reading"] { background: rgba(14, 165, 233, 0.2); color: #38bdf8; border-color: #38bdf8; font-weight: 600; }
-        .status-choice-btn.selected[data-status="reread"] { background: rgba(217, 70, 239, 0.2); color: #f0abfc; border-color: #f0abfc; font-weight: 600; }
-        .status-choice-btn.selected[data-status="plan"] { background: rgba(249, 115, 22, 0.2); color: #fb923c; border-color: #fb923c; font-weight: 600; }
+        .status-choice-btn.selected { border-color: var(--accent); color: var(--text-primary); font-weight: 600; background: rgba(255,255,255,0.08); }
 
-        .modal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; gap: 10px; }
-        .right-actions { display: flex; gap: 8px; margin-left: auto; }
-        .btn { padding: 9px 16px; border-radius: 10px; font-size: 0.88rem; font-weight: 500; cursor: pointer; border: 1px solid transparent; }
-        .btn-primary { background: var(--accent-gradient); color: #fff; }
-        .btn-secondary { background: rgba(255, 255, 255, 0.06); color: var(--text-primary); border-color: var(--border-glass); }
-        .btn-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); border-color: rgba(239, 68, 68, 0.3); }
-        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.9rem; }
-
-        @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: repeat(3, 1fr); }
-            .stat-card:nth-child(4), .stat-card:nth-child(5) { grid-column: span 1; }
-        }
+        .modal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .btn { padding: 10px 18px; border-radius: 12px; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; }
+        .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 15px var(--accent-glow); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.08); color: var(--text-primary); border: 1px solid var(--border-glass); }
+        .btn-danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .empty-state { text-align: center; padding: 50px 20px; color: var(--text-muted); font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -463,59 +402,100 @@
 <div class="container">
     <header>
         <div class="brand">
-            <h1>NeuLibrar <span class="version-tag">v2.0</span></h1>
-            <p>Eylüm 2025'ten bugüne kişisel okuma arşivi</p>
+            <h1>NeuLibrar <span class="version-tag">v2.5</span></h1>
         </div>
-        <div class="header-actions">
-            <button class="icon-btn" onclick="openBackupModal()">Yedek</button>
-            <button class="icon-btn" onclick="toggleTheme()">Açık/Koyu</button>
+        <!-- 3'lü Üst Navigasyon Sekmeleri -->
+        <div class="nav-tabs">
+            <button class="nav-tab-btn" onclick="switchView('categories')">Kategoriler</button>
+            <button class="nav-tab-btn active" onclick="switchView('home')">Kitaplar</button>
+            <button class="nav-tab-btn" onclick="switchView('settings')">Ayarlar</button>
         </div>
     </header>
 
-    <!-- 5'li İstatistik Grid -->
-    <div class="stats-grid">
-        <div class="stat-card active" id="stat-all" onclick="setFilter('all')">
-            <span class="stat-num" id="count-all">0</span>
-            <span class="stat-label">Toplam</span>
-        </div>
-        <div class="stat-card" id="stat-read" onclick="setFilter('read')">
-            <span class="stat-num" id="count-read">0</span>
-            <span class="stat-label">Okundu</span>
-        </div>
-        <div class="stat-card" id="stat-reading" onclick="setFilter('reading')">
-            <span class="stat-num" id="count-reading">0</span>
-            <span class="stat-label">Okunuyor</span>
-        </div>
-        <div class="stat-card" id="stat-reread" onclick="setFilter('reread')">
-            <span class="stat-num" id="count-reread">0</span>
-            <span class="stat-label">Tekrar Okunan</span>
-        </div>
-        <div class="stat-card" id="stat-plan" onclick="setFilter('plan')">
-            <span class="stat-num" id="count-plan">0</span>
-            <span class="stat-label">Okunacak</span>
+    <!-- SAYFA 1: KATEGORİLER & İSTATİSTİKLER -->
+    <div class="view-panel" id="view-categories">
+        <div class="categories-grid">
+            <div class="cat-card" onclick="filterFromCategory('read')">
+                <div class="cat-num" id="cat-count-read">0</div>
+                <div class="cat-title">✓ Okundu</div>
+                <div class="cat-desc">Tamamlanan eserler</div>
+            </div>
+            <div class="cat-card" onclick="filterFromCategory('reading')">
+                <div class="cat-num" id="cat-count-reading">0</div>
+                <div class="cat-title">📖 Okunuyor</div>
+                <div class="cat-desc">Şu an okunanlar</div>
+            </div>
+            <div class="cat-card" onclick="filterFromCategory('re-reading')">
+                <div class="cat-num" id="cat-count-re-reading">0</div>
+                <div class="cat-title">🔄 Tekrar Okunuyor</div>
+                <div class="cat-desc">İkinci/üçüncü turdakiler</div>
+            </div>
+            <div class="cat-card" onclick="filterFromCategory('reread-plan')">
+                <div class="cat-num" id="cat-count-reread-plan">0</div>
+                <div class="cat-title">📌 Yeniden Okunacak</div>
+                <div class="cat-desc">Tekrar okunmayı bekleyenler</div>
+            </div>
+            <div class="cat-card" style="grid-column: span 2;" onclick="filterFromCategory('plan')">
+                <div class="cat-num" id="cat-count-plan">0</div>
+                <div class="cat-title">⏳ Okunacak</div>
+                <div class="cat-desc">İstek ve plan listesindeki eserler</div>
+            </div>
         </div>
     </div>
 
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Eser adı, yazar veya not ara..." oninput="renderBooks()">
+    <!-- SAYFA 2: ANA SAYFA (TÜM KİTAPLAR) -->
+    <div class="view-panel active" id="view-home">
+        <div class="sort-scroll-container">
+            <button class="sort-chip active" id="sort-no-asc" onclick="setSort('no-asc')">№ 1 → 99</button>
+            <button class="sort-chip" id="sort-no-desc" onclick="setSort('no-desc')">№ 99 → 1</button>
+            <button class="sort-chip" id="sort-title-asc" onclick="setSort('title-asc')">Eser (A → Z)</button>
+            <button class="sort-chip" id="sort-author-asc" onclick="setSort('author-asc')">Yazar (A → Z)</button>
+        </div>
+        <div class="book-list" id="bookList"></div>
     </div>
 
-    <div class="sort-scroll-container">
-        <button class="sort-chip active" id="sort-no-asc" onclick="setSort('no-asc')">№ 1 → 99</button>
-        <button class="sort-chip" id="sort-no-desc" onclick="setSort('no-desc')">№ 99 → 1</button>
-        <button class="sort-chip" id="sort-title-asc" onclick="setSort('title-asc')">Eser (A → Z)</button>
-        <button class="sort-chip" id="sort-author-asc" onclick="setSort('author-asc')">Yazar (A → Z)</button>
-    </div>
+    <!-- SAYFA 3: AYARLAR -->
+    <div class="view-panel" id="view-settings">
+        <div class="settings-section">
+            <div class="settings-title">Renk Paleti (Accent Theme)</div>
+            <div class="color-palette">
+                <div class="color-dot active" style="background:#6366f1;" onclick="setThemeColor('#6366f1', 'rgba(99, 102, 241, 0.35)')"></div>
+                <div class="color-dot" style="background:#10b981;" onclick="setThemeColor('#10b981', 'rgba(16, 185, 129, 0.35)')"></div>
+                <div class="color-dot" style="background:#06b6d4;" onclick="setThemeColor('#06b6d4', 'rgba(6, 182, 212, 0.35)')"></div>
+                <div class="color-dot" style="background:#f97316;" onclick="setThemeColor('#f97316', 'rgba(249, 115, 22, 0.35)')"></div>
+                <div class="color-dot" style="background:#ec4899;" onclick="setThemeColor('#ec4899', 'rgba(236, 72, 153, 0.35)')"></div>
+            </div>
+        </div>
 
-    <div class="book-list" id="bookList"></div>
+        <div class="settings-section">
+            <div class="settings-title">Görünüm Modu</div>
+            <button class="btn btn-secondary" onclick="toggleTheme()">Karanlık / Aydınlık Mod</button>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-title">Yedekleme & Veri Yönetimi</div>
+            <div style="display:flex; gap:10px; flex-direction:column;">
+                <button class="btn btn-primary" onclick="copyBackupToClipboard()">📋 Yedeği Kopyala</button>
+                <button class="btn btn-secondary" onclick="openRestoreArea()">📥 Veri Geri Yükle</button>
+            </div>
+            <div id="restoreArea" style="display:none; margin-top:10px;">
+                <textarea id="restoreText" style="width:100%; height:70px; background:rgba(0,0,0,0.2); border:1px solid var(--border-glass); border-radius:10px; color:#fff; font-family:'JetBrains Mono'; font-size:0.75rem; padding:8px;"></textarea>
+                <button class="btn btn-primary" style="margin-top:8px; font-size:0.8rem;" onclick="restoreFromText()">Uygula</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<button class="fab" onclick="openBookModal()">+ Kitap Ekle</button>
+<!-- Alt Yüzen Kapsül (Floating Glass Pill) -->
+<div class="floating-capsule">
+    <input type="text" class="capsule-input" id="searchInput" placeholder="Eser, yazar veya not ara..." oninput="renderBooks()">
+    <button class="capsule-add-btn" onclick="openBookModal()">+ Ekle</button>
+</div>
 
 <!-- Kitap Ekle/Düzenle Modal -->
 <div class="modal-overlay" id="bookModal">
     <div class="modal">
-        <h2 id="modalTitle">Kitap Bilgisi</h2>
+        <h2 id="modalTitle" style="font-size:1.1rem; margin-bottom:14px;">Kitap Bilgisi</h2>
         <input type="hidden" id="bookId">
         <div class="form-group">
             <label>Sıra №</label>
@@ -530,15 +510,14 @@
             <input type="text" id="bookAuthor" placeholder="Örn: Haruki Murakami">
         </div>
         
-        <!-- İnteraktif Tekrar Okuma Kontrol Paneli -->
-        <div class="reread-box" id="rereadSection" style="display:none;">
+        <!-- Tekrar Okunma Geçmişi Sayacı -->
+        <div class="reread-box">
             <div>
-                <span style="font-size:0.88rem; font-weight:600;">Tekrar Okunma Seviyesi</span>
-                <p style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">Bu eseri kaçıncı kez okuyorsun?</p>
+                <span style="font-size:0.85rem; font-weight:600;" id="readInfoText">Bu eser 1 kez okundu</span>
             </div>
-            <div class="reread-counter-controls">
+            <div class="counter-controls">
                 <button type="button" class="counter-btn" onclick="adjustReadCount(-1)">-</button>
-                <span class="counter-num" id="readCountLabel">1</span>
+                <span style="font-family:'JetBrains Mono'; font-weight:700;" id="readCountLabel">1</span>
                 <button type="button" class="counter-btn" onclick="adjustReadCount(1)">+</button>
             </div>
         </div>
@@ -549,8 +528,9 @@
             <div class="status-button-grid">
                 <button type="button" class="status-choice-btn selected" data-status="read" onclick="selectStatus('read')">✓ Okundu</button>
                 <button type="button" class="status-choice-btn" data-status="reading" onclick="selectStatus('reading')">📖 Okunuyor</button>
-                <button type="button" class="status-choice-btn" data-status="reread" onclick="selectStatus('reread')">🔄 Yeniden</button>
-                <button type="button" class="status-choice-btn" data-status="plan" onclick="selectStatus('plan')">📌 Okunacak</button>
+                <button type="button" class="status-choice-btn" data-status="re-reading" onclick="selectStatus('re-reading')">🔄 Tekrar Okunuyor</button>
+                <button type="button" class="status-choice-btn" data-status="reread-plan" onclick="selectStatus('reread-plan')">📌 Yeniden Okunacak</button>
+                <button type="button" class="status-choice-btn" style="grid-column: span 2;" data-status="plan" onclick="selectStatus('plan')">⏳ Okunacak</button>
             </div>
         </div>
         <div class="form-group">
@@ -559,30 +539,10 @@
         </div>
         <div class="modal-actions">
             <button class="btn btn-danger" id="deleteBtn" style="display:none;" onclick="deleteBook()">Sil</button>
-            <div class="right-actions">
+            <div style="display:flex; gap:8px; margin-left:auto;">
                 <button class="btn btn-secondary" onclick="closeBookModal()">İptal</button>
                 <button class="btn btn-primary" onclick="saveBook()">Kaydet</button>
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- Yedek Modal -->
-<div class="modal-overlay" id="backupModal">
-    <div class="modal">
-        <h2>Veri Yedekleme & Aktarım</h2>
-        <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:14px;">Verilerini kopyalayıp güvenli bir yere yapıştırabilirsin.</p>
-        <div style="display:flex; flex-direction:column; gap:9px;">
-            <button class="btn btn-primary" onclick="copyBackupToClipboard()">📋 Yedeği Panoya Kopyala</button>
-            <button class="btn btn-secondary" onclick="openRestoreArea()">📥 Metin Yapıştırarak Geri Yükle</button>
-            
-            <div id="restoreArea" style="display:none; flex-direction:column; gap:8px; margin-top:6px; background:rgba(0,0,0,0.3); padding:10px; border-radius:10px;">
-                <textarea id="restoreText" style="width:100%; height:80px; background:var(--bg-primary); color:var(--text-primary); border:1px solid var(--border-glass); border-radius:8px; font-family:'JetBrains Mono',monospace; font-size:0.75rem; padding:6px;"></textarea>
-                <button class="btn btn-primary" style="font-size:0.8rem; padding:6px 12px;" onclick="restoreFromText()">Uygula ve Geri Yükle</button>
-            </div>
-        </div>
-        <div class="modal-actions" style="margin-top:16px;">
-            <button class="btn btn-secondary" onclick="closeBackupModal()">Kapat</button>
         </div>
     </div>
 </div>
@@ -597,9 +557,9 @@
         { id: 6, no: 6, title: "Tersi ve Yüzü", author: "Albert Camus", status: "read", readCount: 1, notes: "" },
         { id: 7, no: 7, title: "Düşüş", author: "Albert Camus", status: "read", readCount: 1, notes: "" },
         { id: 8, no: 8, title: "Sürgün ve Krallık", author: "Albert Camus", status: "read", readCount: 1, notes: "" },
-        { id: 9, no: 9, title: "Sisifos Söyleni", author: "Albert Camus", status: "reread", readCount: 1, notes: "Yeniden okunacak" },
+        { id: 9, no: 9, title: "Sisifos Söyleni", author: "Albert Camus", status: "reread-plan", readCount: 1, notes: "Yeniden okunacak" },
         { id: 10, no: 10, title: "Veba", author: "Albert Camus", status: "read", readCount: 1, notes: "" },
-        { id: 11, no: 11, title: "Başkaldıran İnsan", author: "Albert Camus", status: "reread", readCount: 1, notes: "Yeniden okunacak" },
+        { id: 11, no: 11, title: "Başkaldıran İnsan", author: "Albert Camus", status: "reread-plan", readCount: 1, notes: "Yeniden okunacak" },
         { id: 12, no: 12, title: "Albert Camus ve Başkaldırma Edebiyatı", author: "John Cruickshank", status: "reading", readCount: 1, notes: "Yarısına kadar okundu" },
         { id: 13, no: 13, title: "Tanrı'yı Gören Köpek", author: "Dino Buzzati", status: "read", readCount: 1, notes: "" },
         { id: 14, no: 14, title: "Dava", author: "Franz Kafka", status: "read", readCount: 1, notes: "" },
@@ -659,25 +619,33 @@
     }
 
     function updateStats() {
-        document.getElementById("count-all").textContent = books.length;
-        document.getElementById("count-read").textContent = books.filter(b => b.status === "read").length;
-        document.getElementById("count-reading").textContent = books.filter(b => b.status === "reading").length;
-        document.getElementById("count-reread").textContent = books.filter(b => b.readCount > 1 || b.status === "reread").length;
-        document.getElementById("count-plan").textContent = books.filter(b => b.status === "plan").length;
+        document.getElementById("cat-count-read").textContent = books.filter(b => b.status === "read").length;
+        document.getElementById("cat-count-reading").textContent = books.filter(b => b.status === "reading").length;
+        document.getElementById("cat-count-re-reading").textContent = books.filter(b => b.status === "re-reading" || b.readCount > 1).length;
+        document.getElementById("cat-count-reread-plan").textContent = books.filter(b => b.status === "reread-plan").length;
+        document.getElementById("cat-count-plan").textContent = books.filter(b => b.status === "plan").length;
     }
 
-    function setFilter(filter) {
-        currentFilter = filter;
-        document.querySelectorAll(".stat-card").forEach(el => el.classList.remove("active"));
-        document.getElementById("stat-" + filter).classList.add("active");
+    function switchView(viewName) {
+        document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+        
+        document.getElementById('view-' + viewName).classList.add('active');
+        
+        const btnIdx = viewName === 'categories' ? 0 : viewName === 'home' ? 1 : 2;
+        document.querySelectorAll('.nav-tab-btn')[btnIdx].classList.add('active');
+    }
+
+    function filterFromCategory(statusKey) {
+        currentFilter = statusKey;
+        switchView('home');
         renderBooks();
     }
 
     function setSort(sortKey) {
         currentSort = sortKey;
         document.querySelectorAll(".sort-chip").forEach(el => el.classList.remove("active"));
-        const target = document.getElementById("sort-" + sortKey);
-        if (target) target.classList.add("active");
+        document.getElementById("sort-" + sortKey).classList.add("active");
         renderBooks();
     }
 
@@ -692,6 +660,7 @@
     function adjustReadCount(delta) {
         editingReadCount = Math.max(1, editingReadCount + delta);
         document.getElementById("readCountLabel").textContent = editingReadCount;
+        document.getElementById("readInfoText").textContent = `Bu eser ${editingReadCount} kez okundu`;
     }
 
     function renderBooks() {
@@ -702,7 +671,8 @@
         let filtered = books.filter(b => {
             if (currentFilter === "read" && b.status !== "read") return false;
             if (currentFilter === "reading" && b.status !== "reading") return false;
-            if (currentFilter === "reread" && (b.readCount <= 1 && b.status !== "reread")) return false;
+            if (currentFilter === "re-reading" && (b.status !== "re-reading" && b.readCount <= 1)) return false;
+            if (currentFilter === "reread-plan" && b.status !== "reread-plan") return false;
             if (currentFilter === "plan" && b.status !== "plan") return false;
 
             if (!query) return true;
@@ -723,7 +693,7 @@
         });
 
         if (filtered.length === 0) {
-            listEl.innerHTML = '<div class="empty-state">Eşleşen kitap bulunamadı.</div>';
+            listEl.innerHTML = '<div class="empty-state">Eşleşen eser bulunamadı.</div>';
             return;
         }
 
@@ -731,13 +701,9 @@
             let statusLabel = "✓ Okundu";
             let statusClass = "badge-read";
             if (b.status === "reading") { statusLabel = "📖 Okunuyor"; statusClass = "badge-reading"; }
-            else if (b.status === "reread") { statusLabel = "🔄 Yeniden"; statusClass = "badge-reread"; }
-            else if (b.status === "plan") { statusLabel = "📌 Okunacak"; statusClass = "badge-plan"; }
-
-            // Okundu rozetinin hemen solunda yer alacak fıstık yeşili parlak "Tekrar Okunuyor / Okundu" rozeti
-            const rereadBadge = (b.readCount && b.readCount > 1) 
-                ? `<span class="badge badge-reread-count" title="${b.readCount} Kez Okundu">🔄 ${b.readCount}x Tekrar</span>` 
-                : '';
+            else if (b.status === "re-reading") { statusLabel = "🔄 Tekrar Okunuyor"; statusClass = "badge-rereading"; }
+            else if (b.status === "reread-plan") { statusLabel = "📌 Yeniden Okunacak"; statusClass = "badge-reread-plan"; }
+            else if (b.status === "plan") { statusLabel = "⏳ Okunacak"; statusClass = "badge-plan"; }
 
             return `
                 <div class="book-item" onclick="openBookModal(${b.id})">
@@ -747,8 +713,7 @@
                         <div class="book-author">${escapeHtml(b.author)}</div>
                         ${b.notes ? `<div class="book-note">${escapeHtml(b.notes)}</div>` : ''}
                     </div>
-                    <div class="badges-container">
-                        ${rereadBadge}
+                    <div>
                         <span class="badge ${statusClass}">${statusLabel}</span>
                     </div>
                 </div>
@@ -759,7 +724,6 @@
     function openBookModal(id = null) {
         const modal = document.getElementById("bookModal");
         const deleteBtn = document.getElementById("deleteBtn");
-        const rereadSection = document.getElementById("rereadSection");
 
         if (id) {
             const book = books.find(b => b.id === id);
@@ -774,7 +738,7 @@
             
             editingReadCount = book.readCount || 1;
             document.getElementById("readCountLabel").textContent = editingReadCount;
-            rereadSection.style.display = "flex";
+            document.getElementById("readInfoText").textContent = `Bu eser ${editingReadCount} kez okundu`;
             deleteBtn.style.display = "block";
         } else {
             const nextNo = books.length > 0 ? Math.max(...books.map(b => b.no)) + 1 : 1;
@@ -786,7 +750,8 @@
             selectStatus("reading");
             document.getElementById("bookNotes").value = "";
             editingReadCount = 1;
-            rereadSection.style.display = "none";
+            document.getElementById("readCountLabel").textContent = 1;
+            document.getElementById("readInfoText").textContent = "Bu eser 1 kez okundu";
             deleteBtn.style.display = "none";
         }
         modal.classList.add("open");
@@ -828,6 +793,13 @@
         }
     }
 
+    function setThemeColor(hexColor, glowColor) {
+        document.documentElement.style.setProperty('--accent', hexColor);
+        document.documentElement.style.setProperty('--accent-glow', glowColor);
+        document.querySelectorAll('.color-dot').forEach(dot => dot.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
     function toggleTheme() {
         const current = document.documentElement.getAttribute("data-theme");
         if (current === "light") {
@@ -837,9 +809,6 @@
         }
     }
 
-    function openBackupModal() { document.getElementById("backupModal").classList.add("open"); }
-    function closeBackupModal() { document.getElementById("backupModal").classList.remove("open"); }
-
     function copyBackupToClipboard() {
         const dataStr = JSON.stringify(books, null, 2);
         navigator.clipboard.writeText(dataStr).then(() => alert("Kütüphane yedeğin panoya kopyalandı!"));
@@ -847,7 +816,7 @@
 
     function openRestoreArea() {
         const area = document.getElementById("restoreArea");
-        area.style.display = area.style.display === "none" ? "flex" : "none";
+        area.style.display = area.style.display === "none" ? "block" : "none";
     }
 
     function restoreFromText() {
@@ -858,7 +827,6 @@
                 books = imported;
                 saveToStorage();
                 renderBooks();
-                closeBackupModal();
                 alert("Geri yüklendi!");
             }
         } catch (e) { alert("Geçersiz veri."); }
