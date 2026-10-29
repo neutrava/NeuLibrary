@@ -18,26 +18,26 @@
             --bg-primary: #060709;
             --glass-bg: rgba(255, 255, 255, 0.06);
             --glass-card: rgba(255, 255, 255, 0.04);
-            --glass-modal: rgba(12, 14, 20, 0.85);
+            --glass-modal: rgba(12, 14, 20, 0.88);
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
             --glass-border: rgba(255, 255, 255, 0.16);
-            --glass-shine: inset 0 1px 1px 0 rgba(255, 255, 255, 0.28);
-            --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.45);
+            --glass-shine: inset 0 1px 1px 0 rgba(255, 255, 255, 0.3);
+            --glass-shadow: 0 14px 35px 0 rgba(0, 0, 0, 0.5);
             --danger: #ef4444;
         }
 
         [data-theme="light"] {
             --bg-primary: #e2e8f0;
-            --glass-bg: rgba(255, 255, 255, 0.6);
-            --glass-card: rgba(255, 255, 255, 0.45);
-            --glass-modal: rgba(255, 255, 255, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-card: rgba(255, 255, 255, 0.5);
+            --glass-modal: rgba(255, 255, 255, 0.92);
             --text-primary: #0f172a;
             --text-secondary: #334155;
             --text-muted: #64748b;
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --glass-shine: inset 0 1px 1px 0 rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --glass-shine: inset 0 1px 1px 0 rgba(255, 255, 255, 0.85);
             --glass-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.08);
         }
 
@@ -54,7 +54,7 @@
             user-select: none;
         }
 
-        /* Continuous Dynamic Aurora Lights */
+        /* Continuous Dynamic Aurora Background */
         .aurora-viewport {
             position: fixed;
             inset: 0;
@@ -66,34 +66,28 @@
         .aurora-blob {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
+            filter: blur(85px);
+            opacity: 0.62;
             will-change: transform;
         }
 
         .aurora-1 {
-            top: -80px;
-            left: -60px;
-            width: 360px;
-            height: 360px;
+            top: -80px; left: -60px;
+            width: 360px; height: 360px;
             background: radial-gradient(circle, var(--accent) 0%, rgba(139,92,246,0) 70%);
             animation: moveAurora1 15s ease-in-out infinite alternate;
         }
 
         .aurora-2 {
-            bottom: -60px;
-            right: -60px;
-            width: 380px;
-            height: 380px;
+            bottom: -60px; right: -60px;
+            width: 380px; height: 380px;
             background: radial-gradient(circle, #06b6d4 0%, rgba(6,182,212,0) 70%);
             animation: moveAurora2 18s ease-in-out infinite alternate;
         }
 
         .aurora-3 {
-            top: 40%;
-            left: 30%;
-            width: 300px;
-            height: 300px;
+            top: 40%; left: 30%;
+            width: 300px; height: 300px;
             background: radial-gradient(circle, #ec4899 0%, rgba(236,72,153,0) 70%);
             animation: moveAurora1 21s ease-in-out infinite alternate-reverse;
         }
@@ -110,33 +104,24 @@
             100% { transform: translate(60px, -90px) scale(1.2); }
         }
 
-        /* App Main Architecture */
+        /* App Main Shell */
         .app-shell {
             position: relative;
             z-index: 10;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            max-width: 680px;
-            margin: 0 auto;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            max-width: 680px; margin: 0 auto;
         }
 
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px 10px 20px;
-            flex-shrink: 0;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 20px 10px 20px; flex-shrink: 0;
         }
 
         .brand-title {
-            font-size: 1.35rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+            font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em;
             background: linear-gradient(135deg, #ffffff 30%, var(--text-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
         .dots-indicator { display: flex; gap: 6px; }
@@ -145,27 +130,22 @@
 
         /* Smooth Viewport Swipe Container */
         .views-viewport {
-            flex: 1;
-            display: flex;
-            width: 300%;
-            height: 100%;
+            flex: 1; display: flex; width: 300%; height: 100%;
             transition: transform 0.32s cubic-bezier(0.25, 1, 0.5, 1);
             will-change: transform;
         }
 
-        /* Independent Scroll Pages */
+        /* Independent Scroll Pages with Extra Bottom Padding for Floating Pill */
         .view-page {
-            width: 33.3333%;
-            height: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 8px 18px 120px 18px;
+            width: 33.3333%; height: 100%;
+            overflow-y: auto; overflow-x: hidden;
+            padding: 8px 18px 170px 18px; /* Extra 170px padding so last item is high above floating dock */
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
         }
         .view-page::-webkit-scrollbar { display: none; }
 
-        /* True Multi-Layer Glass Cards */
+        /* Glass Cards */
         .glass-card {
             background: var(--glass-card);
             backdrop-filter: blur(28px) saturate(190%);
@@ -173,18 +153,12 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow), var(--glass-shine);
             border-radius: 22px;
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
 
         /* Categories Page Cards */
         .categories-stack { display: flex; flex-direction: column; gap: 12px; }
-
-        .cat-card {
-            padding: 18px 20px;
-            cursor: pointer;
-            transition: transform 0.18s ease;
-        }
+        .cat-card { padding: 18px 20px; cursor: pointer; transition: transform 0.18s ease; }
         .cat-card:active { transform: scale(0.97); }
 
         .cat-header { display: flex; justify-content: space-between; align-items: center; }
@@ -198,43 +172,25 @@
         .sort-row::-webkit-scrollbar { display: none; }
 
         .sort-btn {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shine);
-            color: var(--text-secondary);
-            padding: 7px 15px;
-            border-radius: 20px;
-            font-size: 0.76rem;
-            font-weight: 500;
-            white-space: nowrap;
-            cursor: pointer;
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); box-shadow: var(--glass-shine);
+            color: var(--text-secondary); padding: 7px 15px; border-radius: 20px;
+            font-size: 0.76rem; font-weight: 500; white-space: nowrap; cursor: pointer;
         }
         .sort-btn.active { background: var(--accent); color: #fff; border-color: transparent; box-shadow: 0 4px 15px var(--accent-glow); }
 
         .book-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
 
         .book-card {
-            padding: 14px 16px;
-            display: grid;
-            grid-template-columns: 36px 1fr auto;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: transform 0.15s ease;
+            padding: 14px 16px; display: grid; grid-template-columns: 36px 1fr auto;
+            align-items: center; gap: 12px; cursor: pointer; transition: transform 0.15s ease;
         }
         .book-card:active { transform: scale(0.98); }
 
         .book-no {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: 700;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            padding: 5px;
-            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted);
+            font-weight: 700; text-align: center; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border); padding: 5px; border-radius: 8px;
         }
 
         .book-title { font-weight: 600; font-size: 0.94rem; color: var(--text-primary); }
@@ -250,143 +206,106 @@
         .badge-plan { background: rgba(249, 115, 22, 0.16); color: #fb923c; border-color: rgba(251, 146, 60, 0.35); }
         .badge-re-reading { background: rgba(132, 204, 22, 0.18); color: #a3e635; border-color: rgba(163, 230, 53, 0.4); }
 
-        /* Integrated Floating Pill Dock */
+        /* High-End Liquid Glass Floating Pill Dock */
+        .pill-dock-wrapper {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+            width: auto; max-width: 520px; z-index: 85; transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
         .pill-dock {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 480px;
             background: var(--glass-modal);
-            backdrop-filter: blur(32px) saturate(200%);
-            -webkit-backdrop-filter: blur(32px) saturate(200%);
+            backdrop-filter: blur(36px) saturate(210%);
+            -webkit-backdrop-filter: blur(36px) saturate(210%);
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow), var(--glass-shine);
-            border-radius: 40px;
-            padding: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            z-index: 80;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            border-radius: 40px; padding: 6px 8px;
+            display: flex; align-items: center; gap: 8px;
         }
 
-        .pill-search-trigger {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--glass-border);
-            color: var(--text-secondary);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
+        .pill-btn {
+            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border);
+            color: var(--text-primary); height: 42px; border-radius: 30px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 0.86rem; font-weight: 600;
+            padding: 0 16px; gap: 6px; transition: all 0.2s;
+        }
+        .pill-btn:active { transform: scale(0.95); }
+
+        .pill-search-input {
+            width: 0; opacity: 0; border: none; background: transparent;
+            color: var(--text-primary); font-size: 0.88rem; outline: none;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); padding: 0;
         }
 
-        .pill-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-size: 0.88rem;
-            outline: none;
-            padding: 0 6px;
-            display: none;
+        /* Expanded Search Mode inside Pill */
+        .pill-dock.search-active {
+            width: calc(100vw - 36px); max-width: 500px; padding: 6px 12px;
         }
-
-        .pill-dock.expanded .pill-input { display: block; }
-
-        .pill-add-btn {
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 15px var(--accent-glow);
-            white-space: nowrap;
-            margin-left: auto;
+        .pill-dock.search-active .pill-search-input {
+            width: 100%; opacity: 1; padding: 0 8px;
         }
+        .pill-dock.search-active .pill-add-btn-text { display: none; }
 
-        /* Settings Glass Card */
+        /* Search Overlay Backdrop */
+        .search-backdrop {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            z-index: 80; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .search-backdrop.open { opacity: 1; pointer-events: auto; }
+
+        /* Settings Glass Cards */
         .settings-card { padding: 18px; margin-bottom: 14px; }
         .settings-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); }
         .color-row { display: flex; gap: 12px; }
         .color-dot { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
         .color-dot.active { border-color: #fff; box-shadow: 0 0 12px rgba(255,255,255,0.5); }
 
+        /* Toast Notifications */
+        .toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-20px);
+            background: rgba(15, 23, 42, 0.9); border: 1px solid var(--glass-border);
+            color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4); opacity: 0; pointer-events: none;
+            transition: all 0.25s ease; z-index: 120;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
         /* Modals & Category Drawer */
         .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.78);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            z-index: 100;
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            display: none; align-items: center; justify-content: center;
+            padding: 16px; z-index: 100;
         }
         .modal-overlay.open { display: flex; }
 
         .modal {
             background: var(--glass-modal);
-            backdrop-filter: blur(32px) saturate(200%);
-            -webkit-backdrop-filter: blur(32px) saturate(200%);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow), var(--glass-shine);
-            border-radius: 26px;
-            width: 100%;
-            max-width: 440px;
-            padding: 24px;
-            max-height: 88vh;
-            overflow-y: auto;
-            scrollbar-width: none;
+            backdrop-filter: blur(32px) saturate(200%); -webkit-backdrop-filter: blur(32px) saturate(200%);
+            border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow), var(--glass-shine);
+            border-radius: 26px; width: 100%; max-width: 440px; padding: 24px;
+            max-height: 88vh; overflow-y: auto; scrollbar-width: none;
         }
         .modal::-webkit-scrollbar { display: none; }
 
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 5px; font-weight: 500; }
         .form-group input, .form-group textarea {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--glass-border);
-            color: var(--text-primary);
-            padding: 11px 14px;
-            border-radius: 12px;
-            font-size: 0.88rem;
-            outline: none;
+            width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border);
+            color: var(--text-primary); padding: 11px 14px; border-radius: 12px; font-size: 0.88rem; outline: none;
         }
 
         .reread-row {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--glass-border);
-            padding: 12px;
-            border-radius: 14px;
-            margin-bottom: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border);
+            padding: 12px; border-radius: 14px; margin-bottom: 14px;
+            display: flex; justify-content: space-between; align-items: center;
         }
 
         .re-reading-toggle {
-            background: rgba(132, 204, 22, 0.12);
-            border: 1px solid rgba(163, 230, 53, 0.35);
-            color: #a3e635;
-            padding: 9px 12px;
-            border-radius: 12px;
-            font-size: 0.82rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 14px;
-            width: 100%;
-            text-align: center;
+            background: rgba(132, 204, 22, 0.12); border: 1px solid rgba(163, 230, 53, 0.35);
+            color: #a3e635; padding: 9px 12px; border-radius: 12px; font-size: 0.82rem; font-weight: 600;
+            cursor: pointer; margin-bottom: 14px; width: 100%; text-align: center;
         }
         .re-reading-toggle.active { background: rgba(132, 204, 22, 0.32); border-color: #a3e635; }
 
@@ -395,14 +314,8 @@
 
         .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .status-btn {
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid var(--glass-border);
-            color: var(--text-secondary);
-            padding: 10px;
-            border-radius: 12px;
-            font-size: 0.82rem;
-            cursor: pointer;
-            text-align: center;
+            background: rgba(0, 0, 0, 0.25); border: 1px solid var(--glass-border);
+            color: var(--text-secondary); padding: 10px; border-radius: 12px; font-size: 0.82rem; cursor: pointer; text-align: center;
         }
         .status-btn.selected { border-color: var(--accent); color: var(--text-primary); font-weight: 600; background: rgba(255,255,255,0.12); }
 
@@ -420,6 +333,9 @@
     <div class="aurora-blob aurora-2"></div>
     <div class="aurora-blob aurora-3"></div>
 </div>
+
+<div class="search-backdrop" id="searchBackdrop" onclick="closeSearchMode()"></div>
+<div class="toast" id="toastMsg"></div>
 
 <div class="app-shell">
     <header>
@@ -515,23 +431,27 @@
             </div>
 
             <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.78rem; font-family:'JetBrains Mono';">
-                NeuLibrar v3.1 — Kişisel Okuma Arşivi
+                NeuLibrar v3.2 — Kişisel Okuma Arşivi
             </div>
         </div>
     </div>
 </div>
 
-<!-- Floating Glass Dock -->
-<div class="pill-dock" id="pillDock">
-    <div class="pill-search-trigger" onclick="toggleSearchExpand()">🔍</div>
-    <input type="text" class="pill-input" id="searchInput" placeholder="Eser, yazar veya not ara..." oninput="renderMainBooks()">
-    <button class="pill-add-btn" onclick="openBookModal()">+ Ekle</button>
+<!-- Floating Liquid Glass Pill Dock -->
+<div class="pill-dock-wrapper">
+    <div class="pill-dock" id="pillDock">
+        <button class="pill-btn" onclick="openSearchMode()">🔍</button>
+        <input type="text" class="pill-search-input" id="searchInput" placeholder="Eser, yazar veya not ara..." oninput="renderMainBooks()">
+        <button class="pill-btn" style="background:var(--accent); border-color:transparent; color:#fff; box-shadow:0 4px 15px var(--accent-glow);" onclick="openBookModal()">
+            <span>+</span><span class="pill-add-btn-text">Ekle</span>
+        </button>
+    </div>
 </div>
 
 <!-- Bağımsız Kategori Detay Çekmecesi -->
 <div class="modal-overlay" id="categoryDrawer">
     <div class="modal">
-        <div style="display:flex; justify-space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
             <h2 id="drawerTitle" style="font-size:1.05rem;">Kategori</h2>
             <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.78rem;" onclick="closeCategoryDrawer()">Kapat</button>
         </div>
@@ -646,6 +566,7 @@
     let currentSort = "no-asc";
     let editingReadCount = 1;
     let editingIsReReading = false;
+    let lastBackPressTime = 0;
 
     let touchStartX = 0;
     let touchEndX = 0;
@@ -666,6 +587,7 @@
             saveToStorage();
         }
         setupGestures();
+        setupAndroidBackButton();
         switchView(1);
     }
 
@@ -675,6 +597,54 @@
         renderMainBooks();
     }
 
+    /* Android Back Button Intercept Logic */
+    function setupAndroidBackButton() {
+        history.pushState({ page: 'home' }, '');
+        window.addEventListener('popstate', function (e) {
+            // Priority 1: Close Modals / Drawers
+            const openModal = document.querySelector('.modal-overlay.open');
+            if (openModal) {
+                closeBookModal();
+                closeCategoryDrawer();
+                history.pushState({ page: 'home' }, '');
+                return;
+            }
+
+            // Priority 2: Close Search Mode
+            const pill = document.getElementById('pillDock');
+            if (pill.classList.contains('search-active')) {
+                closeSearchMode();
+                history.pushState({ page: 'home' }, '');
+                return;
+            }
+
+            // Priority 3: Return to Home Showcase Page if on Categories or Settings
+            if (currentViewIdx !== 1) {
+                switchView(1);
+                history.pushState({ page: 'home' }, '');
+                return;
+            }
+
+            // Priority 4: Exit Prevention (Double Press to Exit)
+            const now = Date.now();
+            if (now - lastBackPressTime < 2000) {
+                history.back(); // Exit app
+            } else {
+                lastBackPressTime = now;
+                showToast("Çıkmak için tekrar geri basın");
+                history.pushState({ page: 'home' }, '');
+            }
+        });
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById("toastMsg");
+        toast.textContent = msg;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2000);
+    }
+
+    /* Gesture & Swipe Handling */
     function setupGestures() {
         const vp = document.getElementById('viewport');
         vp.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
@@ -814,12 +784,21 @@
         renderMainBooks();
     }
 
-    function toggleSearchExpand() {
-        const dock = document.getElementById('pillDock');
-        dock.classList.toggle('expanded');
-        if (dock.classList.contains('expanded')) {
-            document.getElementById('searchInput').focus();
+    function openSearchMode() {
+        const pill = document.getElementById('pillDock');
+        if (!pill.classList.contains('search-active')) {
+            pill.classList.add('search-active');
+            document.getElementById('searchBackdrop').classList.add('open');
+            setTimeout(() => document.getElementById('searchInput').focus(), 150);
         }
+    }
+
+    function closeSearchMode() {
+        const pill = document.getElementById('pillDock');
+        pill.classList.remove('search-active');
+        document.getElementById('searchBackdrop').classList.remove('open');
+        document.getElementById('searchInput').value = '';
+        renderMainBooks();
     }
 
     function openBookModal(id = null) {
