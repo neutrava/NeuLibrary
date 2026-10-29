@@ -2,8 +2,8 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#07080a">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#060709">
     <title>NeuLibrar</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -13,152 +13,216 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent: #6366f1;
-            --accent-glow: rgba(99, 102, 241, 0.4);
-            --bg-primary: #07080a;
-            --bg-glass: rgba(255, 255, 255, 0.04);
-            --bg-glass-card: rgba(255, 255, 255, 0.03);
-            --bg-modal: rgba(12, 14, 18, 0.88);
-            --text-primary: #f3f4f6;
-            --text-secondary: #9ca3af;
-            --text-muted: #6b7280;
-            --border-glass: rgba(255, 255, 255, 0.09);
-            --border-glass-shine: rgba(255, 255, 255, 0.18);
-            --gloss-line: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+            --accent: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.5);
+            --bg-primary: #060709;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-card: rgba(255, 255, 255, 0.04);
+            --glass-modal: rgba(12, 14, 20, 0.85);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --glass-border: rgba(255, 255, 255, 0.16);
+            --glass-shine: inset 0 1px 1px 0 rgba(255, 255, 255, 0.28);
+            --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.45);
             --danger: #ef4444;
         }
 
         [data-theme="light"] {
-            --bg-primary: #e5e9f0;
-            --bg-glass: rgba(255, 255, 255, 0.65);
-            --bg-glass-card: rgba(255, 255, 255, 0.5);
-            --bg-modal: rgba(255, 255, 255, 0.92);
+            --bg-primary: #e2e8f0;
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-card: rgba(255, 255, 255, 0.45);
+            --glass-modal: rgba(255, 255, 255, 0.9);
             --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #94a3b8;
-            --border-glass: rgba(0, 0, 0, 0.08);
-            --border-glass-shine: rgba(0, 0, 0, 0.15);
-            --gloss-line: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shine: inset 0 1px 1px 0 rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.08);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
             background-color: var(--bg-primary);
             color: var(--text-primary);
+            font-family: 'Inter', -apple-system, sans-serif;
             user-select: none;
-            overflow-x: hidden;
-            min-height: 100vh;
         }
 
-        /* Live Aurora Background */
-        .aurora-container {
+        /* Continuous Dynamic Aurora Lights */
+        .aurora-viewport {
             position: fixed;
             inset: 0;
-            overflow: hidden;
             pointer-events: none;
             z-index: 0;
+            overflow: hidden;
         }
 
         .aurora-blob {
             position: absolute;
             border-radius: 50%;
-            filter: blur(90px);
+            filter: blur(80px);
             opacity: 0.6;
-            animation: floatAurora 18s ease-in-out infinite alternate;
+            will-change: transform;
         }
 
-        .aurora-1 { top: -10%; left: -10%; width: 420px; height: 420px; background: var(--accent-glow); }
-        .aurora-2 { bottom: -10%; right: -10%; width: 380px; height: 380px; background: rgba(16, 185, 129, 0.22); animation-delay: -5s; }
+        .aurora-1 {
+            top: -80px;
+            left: -60px;
+            width: 360px;
+            height: 360px;
+            background: radial-gradient(circle, var(--accent) 0%, rgba(139,92,246,0) 70%);
+            animation: moveAurora1 15s ease-in-out infinite alternate;
+        }
 
-        @keyframes floatAurora {
+        .aurora-2 {
+            bottom: -60px;
+            right: -60px;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, #06b6d4 0%, rgba(6,182,212,0) 70%);
+            animation: moveAurora2 18s ease-in-out infinite alternate;
+        }
+
+        .aurora-3 {
+            top: 40%;
+            left: 30%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #ec4899 0%, rgba(236,72,153,0) 70%);
+            animation: moveAurora1 21s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes moveAurora1 {
             0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(40px, -60px) scale(1.15); }
-            100% { transform: translate(-30px, 40px) scale(0.95); }
+            50% { transform: translate(90px, 70px) scale(1.25); }
+            100% { transform: translate(-50px, 110px) scale(0.9); }
         }
 
-        .app-shell { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+        @keyframes moveAurora2 {
+            0% { transform: translate(0, 0) scale(1.1); }
+            50% { transform: translate(-80px, -60px) scale(0.85); }
+            100% { transform: translate(60px, -90px) scale(1.2); }
+        }
 
-        /* Minimal Header & Dots Indicator */
+        /* App Main Architecture */
+        .app-shell {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px 20px 10px 20px;
+            padding: 16px 20px 10px 20px;
+            flex-shrink: 0;
         }
 
-        .brand-title { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; }
+        .brand-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 30%, var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
         .dots-indicator { display: flex; gap: 6px; }
-        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-muted); opacity: 0.4; transition: all 0.3s ease; }
-        .dot.active { background: var(--accent); opacity: 1; width: 20px; border-radius: 10px; box-shadow: 0 0 10px var(--accent-glow); }
+        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-muted); opacity: 0.35; transition: all 0.3s ease; }
+        .dot.active { background: var(--accent); opacity: 1; width: 22px; border-radius: 10px; box-shadow: 0 0 12px var(--accent-glow); }
 
-        /* Swipeable Views Area */
-        .views-viewport { flex: 1; display: flex; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); width: 300%; }
-        .view-page { width: 33.333%; padding: 10px 20px 120px 20px; }
+        /* Smooth Viewport Swipe Container */
+        .views-viewport {
+            flex: 1;
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.32s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform;
+        }
 
-        /* Categories Glass Cards */
+        /* Independent Scroll Pages */
+        .view-page {
+            width: 33.3333%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 8px 18px 120px 18px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .view-page::-webkit-scrollbar { display: none; }
+
+        /* True Multi-Layer Glass Cards */
+        .glass-card {
+            background: var(--glass-card);
+            backdrop-filter: blur(28px) saturate(190%);
+            -webkit-backdrop-filter: blur(28px) saturate(190%);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow), var(--glass-shine);
+            border-radius: 22px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Categories Page Cards */
         .categories-stack { display: flex; flex-direction: column; gap: 12px; }
 
         .cat-card {
-            background: var(--bg-glass-card);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--border-glass);
-            border-radius: 20px;
-            padding: 16px 18px;
+            padding: 18px 20px;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s, border-color 0.2s;
+            transition: transform 0.18s ease;
         }
-
-        .cat-card::before { content: ''; position: absolute; inset: 0; background: var(--gloss-line); pointer-events: none; }
-        .cat-card:active { transform: scale(0.98); }
+        .cat-card:active { transform: scale(0.97); }
 
         .cat-header { display: flex; justify-content: space-between; align-items: center; }
-        .cat-name { font-size: 0.98rem; font-weight: 600; color: var(--text-primary); }
-        .cat-count { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+        .cat-name { font-size: 1rem; font-weight: 600; color: var(--text-primary); }
+        .cat-count { font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; font-weight: 700; color: var(--accent); }
         .cat-previews { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-        .cat-chip { font-size: 0.72rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border-glass); }
+        .cat-chip { font-size: 0.72rem; color: var(--text-secondary); background: rgba(255,255,255,0.06); padding: 4px 9px; border-radius: 8px; border: 1px solid var(--glass-border); }
 
-        /* Main Showcase Book List */
+        /* Showcase Book List */
         .sort-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
+        .sort-row::-webkit-scrollbar { display: none; }
+
         .sort-btn {
-            background: var(--bg-glass);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-glass);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shine);
             color: var(--text-secondary);
-            padding: 6px 14px;
+            padding: 7px 15px;
             border-radius: 20px;
             font-size: 0.76rem;
             font-weight: 500;
             white-space: nowrap;
             cursor: pointer;
         }
-        .sort-btn.active { background: var(--accent); color: #fff; border-color: transparent; }
+        .sort-btn.active { background: var(--accent); color: #fff; border-color: transparent; box-shadow: 0 4px 15px var(--accent-glow); }
 
-        .book-list { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+        .book-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
 
         .book-card {
-            background: var(--bg-glass-card);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--border-glass);
-            border-radius: 18px;
             padding: 14px 16px;
             display: grid;
             grid-template-columns: 36px 1fr auto;
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.15s;
+            transition: transform 0.15s ease;
         }
-
-        .book-card::before { content: ''; position: absolute; inset: 0; background: var(--gloss-line); pointer-events: none; }
         .book-card:active { transform: scale(0.98); }
 
         .book-no {
@@ -167,50 +231,50 @@
             color: var(--text-muted);
             font-weight: 700;
             text-align: center;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-glass);
-            padding: 5px 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 5px;
             border-radius: 8px;
         }
 
         .book-title { font-weight: 600; font-size: 0.94rem; color: var(--text-primary); }
-        .book-author { font-size: 0.8rem; color: var(--text-secondary); margin-top: 1px; }
-        .book-note { font-size: 0.74rem; color: #fcd34d; margin-top: 4px; padding: 2px 7px; background: rgba(245, 158, 11, 0.12); border-radius: 5px; display: inline-block; }
+        .book-author { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
+        .book-note { font-size: 0.74rem; color: #fcd34d; margin-top: 4px; padding: 2px 7px; background: rgba(245, 158, 11, 0.12); border-radius: 6px; display: inline-block; }
 
         /* Badges */
         .badges-wrapper { display: flex; gap: 6px; align-items: center; }
         .badge { font-size: 0.74rem; font-weight: 600; padding: 6px 11px; border-radius: 20px; white-space: nowrap; border: 1px solid transparent; }
-        .badge-read { background: rgba(16, 185, 129, 0.16); color: #34d399; border-color: rgba(52, 211, 153, 0.3); }
-        .badge-reading { background: rgba(14, 165, 233, 0.16); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); }
-        .badge-reread-plan { background: rgba(217, 70, 239, 0.16); color: #f0abfc; border-color: rgba(240, 171, 252, 0.3); }
-        .badge-plan { background: rgba(249, 115, 22, 0.16); color: #fb923c; border-color: rgba(251, 146, 60, 0.3); }
-        .badge-re-reading { background: rgba(132, 204, 22, 0.18); color: #a3e635; border-color: rgba(163, 230, 53, 0.35); }
+        .badge-read { background: rgba(16, 185, 129, 0.16); color: #34d399; border-color: rgba(52, 211, 153, 0.35); }
+        .badge-reading { background: rgba(14, 165, 233, 0.16); color: #38bdf8; border-color: rgba(56, 189, 248, 0.35); }
+        .badge-reread-plan { background: rgba(217, 70, 239, 0.16); color: #f0abfc; border-color: rgba(240, 171, 252, 0.35); }
+        .badge-plan { background: rgba(249, 115, 22, 0.16); color: #fb923c; border-color: rgba(251, 146, 60, 0.35); }
+        .badge-re-reading { background: rgba(132, 204, 22, 0.18); color: #a3e635; border-color: rgba(163, 230, 53, 0.4); }
 
-        /* Integrated Floating Capsule (Hap) */
+        /* Integrated Floating Pill Dock */
         .pill-dock {
             position: fixed;
-            bottom: 22px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
             width: calc(100% - 40px);
             max-width: 480px;
-            background: var(--bg-modal);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--border-glass-shine);
+            background: var(--glass-modal);
+            backdrop-filter: blur(32px) saturate(200%);
+            -webkit-backdrop-filter: blur(32px) saturate(200%);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow), var(--glass-shine);
             border-radius: 40px;
             padding: 6px;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
             z-index: 80;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .pill-search-trigger {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid var(--border-glass);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
             color: var(--text-secondary);
             width: 40px;
             height: 40px;
@@ -229,7 +293,7 @@
             color: var(--text-primary);
             font-size: 0.88rem;
             outline: none;
-            padding: 0 4px;
+            padding: 0 6px;
             display: none;
         }
 
@@ -249,28 +313,20 @@
             margin-left: auto;
         }
 
-        /* Settings Card */
-        .settings-card {
-            background: var(--bg-glass-card);
-            backdrop-filter: blur(24px);
-            border: 1px solid var(--border-glass);
-            border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 14px;
-        }
-
+        /* Settings Glass Card */
+        .settings-card { padding: 18px; margin-bottom: 14px; }
         .settings-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); }
         .color-row { display: flex; gap: 12px; }
         .color-dot { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
-        .color-dot.active { border-color: #fff; box-shadow: 0 0 12px rgba(255,255,255,0.4); }
+        .color-dot.active { border-color: #fff; box-shadow: 0 0 12px rgba(255,255,255,0.5); }
 
         /* Modals & Category Drawer */
         .modal-overlay {
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.78);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -280,23 +336,27 @@
         .modal-overlay.open { display: flex; }
 
         .modal {
-            background: var(--bg-modal);
-            border: 1px solid var(--border-glass-shine);
-            border-radius: 24px;
+            background: var(--glass-modal);
+            backdrop-filter: blur(32px) saturate(200%);
+            -webkit-backdrop-filter: blur(32px) saturate(200%);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow), var(--glass-shine);
+            border-radius: 26px;
             width: 100%;
             max-width: 440px;
-            padding: 22px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+            padding: 24px;
             max-height: 88vh;
             overflow-y: auto;
+            scrollbar-width: none;
         }
+        .modal::-webkit-scrollbar { display: none; }
 
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 5px; font-weight: 500; }
         .form-group input, .form-group textarea {
             width: 100%;
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid var(--border-glass);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
             color: var(--text-primary);
             padding: 11px 14px;
             border-radius: 12px;
@@ -305,8 +365,8 @@
         }
 
         .reread-row {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border-glass);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--glass-border);
             padding: 12px;
             border-radius: 14px;
             margin-bottom: 14px;
@@ -317,26 +377,26 @@
 
         .re-reading-toggle {
             background: rgba(132, 204, 22, 0.12);
-            border: 1px solid rgba(163, 230, 53, 0.3);
+            border: 1px solid rgba(163, 230, 53, 0.35);
             color: #a3e635;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 0.8rem;
+            padding: 9px 12px;
+            border-radius: 12px;
+            font-size: 0.82rem;
             font-weight: 600;
             cursor: pointer;
             margin-bottom: 14px;
             width: 100%;
             text-align: center;
         }
-        .re-reading-toggle.active { background: rgba(132, 204, 22, 0.3); border-color: #a3e635; }
+        .re-reading-toggle.active { background: rgba(132, 204, 22, 0.32); border-color: #a3e635; }
 
-        .counter-box { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 20px; border: 1px solid var(--border-glass); }
-        .counter-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; width: 26px; height: 26px; border-radius: 50%; font-weight: 700; cursor: pointer; }
+        .counter-box { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .counter-btn { background: rgba(255,255,255,0.12); border: none; color: #fff; width: 26px; height: 26px; border-radius: 50%; font-weight: 700; cursor: pointer; }
 
         .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .status-btn {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-glass);
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--glass-border);
             color: var(--text-secondary);
             padding: 10px;
             border-radius: 12px;
@@ -344,20 +404,21 @@
             cursor: pointer;
             text-align: center;
         }
-        .status-btn.selected { border-color: var(--accent); color: var(--text-primary); font-weight: 600; background: rgba(255,255,255,0.08); }
+        .status-btn.selected { border-color: var(--accent); color: var(--text-primary); font-weight: 600; background: rgba(255,255,255,0.12); }
 
         .btn { padding: 10px 18px; border-radius: 12px; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; }
         .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 15px var(--accent-glow); }
-        .btn-secondary { background: rgba(255,255,255,0.08); color: var(--text-primary); border: 1px solid var(--border-glass); }
+        .btn-secondary { background: rgba(255,255,255,0.08); color: var(--text-primary); border: 1px solid var(--glass-border); }
         .btn-danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
         .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.88rem; }
     </style>
 </head>
 <body>
 
-<div class="aurora-container">
+<div class="aurora-viewport">
     <div class="aurora-blob aurora-1"></div>
     <div class="aurora-blob aurora-2"></div>
+    <div class="aurora-blob aurora-3"></div>
 </div>
 
 <div class="app-shell">
@@ -371,38 +432,38 @@
     </header>
 
     <div class="views-viewport" id="viewport">
-        <!-- SAYFA 0: KATEGORİLER -->
+        <!-- PAGE 0: KATEGORİLER -->
         <div class="view-page" id="page-0">
             <div class="categories-stack">
-                <div class="cat-card" onclick="openCategoryDrawer('read', '✓ Okundu')">
+                <div class="glass-card cat-card" onclick="openCategoryDrawer('read', '✓ Okundu')">
                     <div class="cat-header">
                         <span class="cat-name">✓ Okundu</span>
                         <span class="cat-count" id="cat-cnt-read">0</span>
                     </div>
                     <div class="cat-previews" id="cat-prev-read"></div>
                 </div>
-                <div class="cat-card" onclick="openCategoryDrawer('reading', '📖 Okunuyor')">
+                <div class="glass-card cat-card" onclick="openCategoryDrawer('reading', '📖 Okunuyor')">
                     <div class="cat-header">
                         <span class="cat-name">📖 Okunuyor</span>
                         <span class="cat-count" id="cat-cnt-reading">0</span>
                     </div>
                     <div class="cat-previews" id="cat-prev-reading"></div>
                 </div>
-                <div class="cat-card" onclick="openCategoryDrawer('re-reading', '🔄 Tekrar Okunuyor')">
+                <div class="glass-card cat-card" onclick="openCategoryDrawer('re-reading', '🔄 Tekrar Okunuyor')">
                     <div class="cat-header">
                         <span class="cat-name">🔄 Tekrar Okunuyor</span>
                         <span class="cat-count" id="cat-cnt-re-reading">0</span>
                     </div>
                     <div class="cat-previews" id="cat-prev-re-reading"></div>
                 </div>
-                <div class="cat-card" onclick="openCategoryDrawer('reread-plan', '📌 Yeniden Okunacak')">
+                <div class="glass-card cat-card" onclick="openCategoryDrawer('reread-plan', '📌 Yeniden Okunacak')">
                     <div class="cat-header">
                         <span class="cat-name">📌 Yeniden Okunacak</span>
                         <span class="cat-count" id="cat-cnt-reread-plan">0</span>
                     </div>
                     <div class="cat-previews" id="cat-prev-reread-plan"></div>
                 </div>
-                <div class="cat-card" onclick="openCategoryDrawer('plan', '⏳ Okunacak')">
+                <div class="glass-card cat-card" onclick="openCategoryDrawer('plan', '⏳ Okunacak')">
                     <div class="cat-header">
                         <span class="cat-name">⏳ Okunacak</span>
                         <span class="cat-count" id="cat-cnt-plan">0</span>
@@ -412,7 +473,7 @@
             </div>
         </div>
 
-        <!-- SAYFA 1: ANA VİTRİN (KİTAPLAR) -->
+        <!-- PAGE 1: ANA SHOWCASE LISTE -->
         <div class="view-page" id="page-1">
             <div class="sort-row">
                 <button class="sort-btn active" id="sort-no-asc" onclick="setSort('no-asc')">№ 1 → 99</button>
@@ -423,44 +484,44 @@
             <div class="book-list" id="mainBookList"></div>
         </div>
 
-        <!-- SAYFA 2: AYARLAR -->
+        <!-- PAGE 2: AYARLAR -->
         <div class="view-page" id="page-2">
-            <div class="settings-card">
+            <div class="glass-card settings-card">
                 <div class="settings-title">Vurgu Rengi Paleti</div>
                 <div class="color-row">
-                    <div class="color-dot active" style="background:#6366f1;" onclick="setThemeColor('#6366f1', 'rgba(99, 102, 241, 0.4)')"></div>
-                    <div class="color-dot" style="background:#10b981;" onclick="setThemeColor('#10b981', 'rgba(16, 185, 129, 0.4)')"></div>
-                    <div class="color-dot" style="background:#06b6d4;" onclick="setThemeColor('#06b6d4', 'rgba(6, 182, 212, 0.4)')"></div>
-                    <div class="color-dot" style="background:#f97316;" onclick="setThemeColor('#f97316', 'rgba(249, 115, 22, 0.4)')"></div>
-                    <div class="color-dot" style="background:#ec4899;" onclick="setThemeColor('#ec4899', 'rgba(236, 72, 153, 0.4)')"></div>
+                    <div class="color-dot active" style="background:#8b5cf6;" onclick="setThemeColor('#8b5cf6', 'rgba(139, 92, 246, 0.5)')"></div>
+                    <div class="color-dot" style="background:#10b981;" onclick="setThemeColor('#10b981', 'rgba(16, 185, 129, 0.5)')"></div>
+                    <div class="color-dot" style="background:#06b6d4;" onclick="setThemeColor('#06b6d4', 'rgba(6, 182, 212, 0.5)')"></div>
+                    <div class="color-dot" style="background:#f97316;" onclick="setThemeColor('#f97316', 'rgba(249, 115, 22, 0.5)')"></div>
+                    <div class="color-dot" style="background:#ec4899;" onclick="setThemeColor('#ec4899', 'rgba(236, 72, 153, 0.5)')"></div>
                 </div>
             </div>
 
-            <div class="settings-card">
+            <div class="glass-card settings-card">
                 <div class="settings-title">Görünüm Modu</div>
                 <button class="btn btn-secondary" style="width:100%;" onclick="toggleTheme()">Karanlık / Aydınlık Mod Değiştir</button>
             </div>
 
-            <div class="settings-card">
+            <div class="glass-card settings-card">
                 <div class="settings-title">Veri Yedekleme & Aktarım</div>
                 <div style="display:flex; flex-direction:column; gap:8px;">
                     <button class="btn btn-primary" onclick="copyBackupToClipboard()">📋 Yedeği Panoya Kopyala</button>
                     <button class="btn btn-secondary" onclick="openRestoreArea()">📥 Veri Geri Yükle</button>
                 </div>
                 <div id="restoreArea" style="display:none; margin-top:10px;">
-                    <textarea id="restoreText" style="width:100%; height:70px; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); border-radius:10px; color:#fff; font-family:'JetBrains Mono'; font-size:0.75rem; padding:8px;"></textarea>
+                    <textarea id="restoreText" style="width:100%; height:70px; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); border-radius:10px; color:#fff; font-family:'JetBrains Mono'; font-size:0.75rem; padding:8px;"></textarea>
                     <button class="btn btn-primary" style="margin-top:8px; width:100%; font-size:0.8rem;" onclick="restoreFromText()">Geri Yüklemeyi Uygula</button>
                 </div>
             </div>
 
             <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.78rem; font-family:'JetBrains Mono';">
-                NeuLibrar v3.0 — Kişisel Okuma Arşivi
+                NeuLibrar v3.1 — Kişisel Okuma Arşivi
             </div>
         </div>
     </div>
 </div>
 
-<!-- Yüzen Kapsül (Floating Pill Dock) -->
+<!-- Floating Glass Dock -->
 <div class="pill-dock" id="pillDock">
     <div class="pill-search-trigger" onclick="toggleSearchExpand()">🔍</div>
     <input type="text" class="pill-input" id="searchInput" placeholder="Eser, yazar veya not ara..." oninput="renderMainBooks()">
@@ -470,7 +531,7 @@
 <!-- Bağımsız Kategori Detay Çekmecesi -->
 <div class="modal-overlay" id="categoryDrawer">
     <div class="modal">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; justify-space-between; align-items:center; margin-bottom:14px;">
             <h2 id="drawerTitle" style="font-size:1.05rem;">Kategori</h2>
             <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.78rem;" onclick="closeCategoryDrawer()">Kapat</button>
         </div>
@@ -478,7 +539,7 @@
     </div>
 </div>
 
-<!-- Kitap Ekle/Düzenle Modal -->
+<!-- Kitap Modal -->
 <div class="modal-overlay" id="bookModal">
     <div class="modal">
         <h2 id="modalTitle" style="font-size:1.1rem; margin-bottom:14px;">Kitap Bilgisi</h2>
@@ -496,7 +557,6 @@
             <input type="text" id="bookAuthor" placeholder="Örn: Haruki Murakami">
         </div>
         
-        <!-- Bağımsız Tekrar Okuma Toggle & Sayacı -->
         <button type="button" class="re-reading-toggle" id="reReadingToggleBtn" onclick="toggleReReadingState()">
             🔄 Şu An Tekrar Okuyorum
         </button>
@@ -587,7 +647,6 @@
     let editingReadCount = 1;
     let editingIsReReading = false;
 
-    // Swipe Gesture Tracking
     let touchStartX = 0;
     let touchEndX = 0;
 
@@ -616,27 +675,22 @@
         renderMainBooks();
     }
 
-    /* Gesture & Swipe Handling */
     function setupGestures() {
         const vp = document.getElementById('viewport');
         vp.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
         vp.addEventListener('touchend', e => {
             touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
+            const diff = touchEndX - touchStartX;
+            if (Math.abs(diff) > 55) {
+                if (diff < 0 && currentViewIdx < 2) switchView(currentViewIdx + 1);
+                if (diff > 0 && currentViewIdx > 0) switchView(currentViewIdx - 1);
+            }
         }, {passive: true});
-    }
-
-    function handleSwipe() {
-        const diff = touchEndX - touchStartX;
-        if (Math.abs(diff) > 50) {
-            if (diff < 0 && currentViewIdx < 2) switchView(currentViewIdx + 1);
-            if (diff > 0 && currentViewIdx > 0) switchView(currentViewIdx - 1);
-        }
     }
 
     function switchView(idx) {
         currentViewIdx = idx;
-        document.getElementById('viewport').style.transform = `translateX(-${idx * 33.333}%)`;
+        document.getElementById('viewport').style.transform = `translateX(-${idx * 33.3333}%)`;
         for (let i = 0; i < 3; i++) {
             document.getElementById(`dot-${i}`).classList.toggle('active', i === idx);
         }
@@ -644,7 +698,6 @@
         if (idx === 1) renderMainBooks();
     }
 
-    /* Categories View (Independent) */
     function renderCategoriesView() {
         const getList = (filterFn) => books.filter(filterFn);
 
@@ -673,7 +726,6 @@
         populateChips('cat-prev-plan', planList);
     }
 
-    /* Open Category Drawer (Doesn't corrupt Main Showcase!) */
     function openCategoryDrawer(key, title) {
         document.getElementById('drawerTitle').textContent = title;
         const drawerList = document.getElementById('drawerBookList');
@@ -697,7 +749,6 @@
 
     function closeCategoryDrawer() { document.getElementById('categoryDrawer').classList.remove('open'); }
 
-    /* Main Showcase Rendering (Pristine #1 to #N) */
     function renderMainBooks() {
         renderCategoriesView();
         const query = document.getElementById("searchInput").value.toLowerCase().trim();
@@ -741,7 +792,7 @@
             : '';
 
         return `
-            <div class="book-card" onclick="openBookModal(${b.id})">
+            <div class="glass-card book-card" onclick="openBookModal(${b.id})">
                 <div class="book-no">${b.no}</div>
                 <div>
                     <div class="book-title">${escapeHtml(b.title)}</div>
@@ -771,7 +822,6 @@
         }
     }
 
-    /* Modal Logic */
     function openBookModal(id = null) {
         const modal = document.getElementById("bookModal");
         const deleteBtn = document.getElementById("deleteBtn");
