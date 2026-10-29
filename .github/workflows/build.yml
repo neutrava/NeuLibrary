@@ -16,16 +16,12 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Build APK
+      - name: Build APK & Sign
         run: |
-          # Eğer dosyalar zip olarak yüklendiyse otomatik çıkar
           unzip -o "*.zip" 2>/dev/null || true
           
           mkdir -p www
           cp index.html manifest.json sw.js *.png www/ 2>/dev/null || true
-          
-          # Eğer index.html hala yoksa boş kalmasın diye kontrol et
-          ls -la www/
           
           echo '{"name":"neulibrar","version":"1.0.0"}' > package.json
           npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
@@ -33,7 +29,6 @@ jobs:
           npx cap add android
           npx cap sync android
           
-          # İkonları Android klasörlerine göm
           if [ -f "icon-512.png" ]; then
             for dir in android/app/src/main/res/mipmap-*; do
               if [ -d "$dir" ]; then
@@ -49,7 +44,11 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug
 
-      - name: Upload APK
+          # Sabit Keystore ile APK'yı İmza
+          BUILD_TOOLS=$(ls -d $ANDROID_HOME/build-tools/* | tail -n 1)
+          $BUILD_TOOLS/apksigner sign --ks ../release.keystore --ks-pass pass:neulibrar123 --ks-key-alias neulibrar --key-pass pass:neulibrar123 app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload Signed APK
         uses: actions/upload-artifact@v4
         with:
           name: NeuLibrar-APK
